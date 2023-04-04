@@ -2,7 +2,140 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<head>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+	<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+	<script src="~/js/app.js"></script>
+	<title>Academic Planning Environment</title>
+	<link rel="stylesheet" href="~/css/app.css">
+	<link rel="shortcut icon" href="https://ape.cedarville.edu/img/favicon.ico">
+	<meta name="viewport" content="width=device-width, height=device-height initial-scale=1">
+	<meta charset="utf-8">
+</head>
+<body>
+	<div id="app-container">
+		<header>
+			<div id="header">
+				<span id="title"><em>Academic Planning Environment</em></span>
+				<span id="version"><em>Version 4.0</em></span>
+				<div id="headerItems">
+					<span class="header-column">
+						<button id="logout"><strong>Log Out</strong></button>
+						<button id="options"><strong>Options</strong></button>
+						<button id="save"><strong>Save</strong></button>
+						<input type="checkbox" id="colorCheck" name="colorCheck" value="colorCheck">
+						<label for="colorCheck">More Colors?</label>
+						<input type="color" id="colors" name="colors">
+						<input type="checkbox" id="rainbow" name="rainbow" value="rainbow">
+						<label for="colorCheck">Rainbow</label>
+						<input type="range" min="1" max="100" value="50" class="slider" id="rainbowSpeed" name="rainbowSpeed">
+						<label for="rainbowSpeed">Speed</label>
+					</span>
+					<span class='header-column'>
+						<span id='major'><strong>Major: </strong><var>$studentMajor</var></span><br>
+						<span id='minor'><strong>Minor: </strong><var>$studentMinor</var></span>
+					</span>
+					<span class='header-column'>
+						<span id='student'><strong>Student: </strong><var>$studentName</var></span><br>
+						<span id='catalog'><strong>Catalog: </strong><var>$catalogYear</var></span>
+					</span>
+				</div>
+			</div>
+		</header>
+		<div class="grid-container">
+			<div class="grid-item" id="ul-container">
+				<div class="section-header">
+					<h2>
+						<!-- this needs to be centered-->
+						Requirements
+					</h2>
+				</div>
+				<div id="accordion">
+					<p>Core Classes</p>
+					<div class="core">
+						<p>Time to deliver some pizza</p>
+					</div>
+					<p>Track</p>
+					<div class="track">
+						<p>Choo Choo<br>I SAID CHOO CHOO</p>
+					</div>
+					<p>Required Cognates</p>
+					<div class="cognates">
+						<p>brain moment</p>
+					</div>
+					<p>Gen Eds</p>
+					<div class="geneds">
+						<p>The general shibang</p>
+					</div>
+				</div>
+			</div>
+			<div class="grid-item" id="ur-container">
+				<div class="section-header" id="schedule-header">
+					<h2>Academic Plan: My Plan</h2>
+				</div>
+				<div class="schedule-container">
+					No years loaded.
+				</div>
+				<div class="schedule-ui">
+					<button>Open Notes</button><button>Delete Year</button><button>Add Year</button>
+					<FORM method='post' action='project4.php'>
+						<label for='planSelect'>Plan</label>
+						<select name='planSelect' id='planSelect' class='planSelect' onchange='this.form.submit()'>
+							<option value=''></option>
+							
+							<option value="">
+							</option>
+						</select>
+					</FORM>
+				</div>
+			</div>
+			<div class="grid-item" id="ll-container">
+				<div class="navigation">
+					<div class="section-header">
+						<h2>
+							Navigation
+						</h2>
+					</div>
+					<label for="year">Year</label>
+					<select name="year" id="year" class="cars"></select>
+
+					<label for="make">Make</label>
+					<select name="make" id="make" class="cars" disabled></select>
+					<label for="model">Model</label>
+					<select name="model" id="model" class="cars" disabled></select>
+
+					<ul class="validation-courses">
+						<li><a href="/">Course Page</a></li>
+						<li><a href="../../~mcgraw/cs3220.html">Andrew McGraw</a></li>
+						<li><a href="../../~hubble/cs3220.html">Ian Hubble</a></li>
+						<li><a href="../cs3220.html">Jackson Isenhower</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="grid-item" id="lr-container">
+				<p id="showing" class="right-float">
+					Loading...
+				</p>
+				<h3 class="left-float">
+					Course Finder
+				</h3>
+				<div class="block-container">
+					<form action="http://judah.cedarville.edu/echo.php" method="post">
+						Search: <u id='clear'>(clear)</u> <input type="text" id="search" name="search">
+						<input type="submit" value="Submit">
+					</form>
+				</div>
+				<div class="table">
+					<table id=courselist>
+						<tr>
+							<td>Name</td>
+							<td>Title</td>
+							<td>Cred</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
