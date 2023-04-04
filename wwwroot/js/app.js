@@ -12,8 +12,6 @@
  *	jquery.ui.widget.js
  */
 
-import "style.js";
-
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -341,13 +339,13 @@ function init() {
 
 	xhr.addEventListener("load", externalPlanHandler);
 	xhr.responseType = "json";
-	xhr.open("GET", "./php/project4_getCombined.php");
+	xhr.open("GET", "~/php/getCombined.php");
 	xhr.onreadystatechange = function() {
 		if(xhrReq == undefined) {
 			xhrReq = new XMLHttpRequest();
 			xhrReq.addEventListener("load", loadRequirements);
 			xhrReq.responseType = "json";
-			xhrReq.open("GET", "./php/project4_getRequirements.php");
+			xhrReq.open("GET", "~/php/getRequirements.php");
 			xhrReq.send();
 		}
 	}
