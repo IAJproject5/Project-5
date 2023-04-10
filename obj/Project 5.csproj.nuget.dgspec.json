@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Admin\\source\\repos\\Project 5\\Project 5.csproj": {}
+    "C:\\Users\\1969a\\OneDrive\\Documents\\GitHub\\Project-5\\Project 5.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Admin\\source\\repos\\Project 5\\Project 5.csproj": {
+    "C:\\Users\\1969a\\OneDrive\\Documents\\GitHub\\Project-5\\Project 5.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Admin\\source\\repos\\Project 5\\Project 5.csproj",
+        "projectUniqueName": "C:\\Users\\1969a\\OneDrive\\Documents\\GitHub\\Project-5\\Project 5.csproj",
         "projectName": "Project 5",
-        "projectPath": "C:\\Users\\Admin\\source\\repos\\Project 5\\Project 5.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Admin\\source\\repos\\Project 5\\obj\\",
+        "projectPath": "C:\\Users\\1969a\\OneDrive\\Documents\\GitHub\\Project-5\\Project 5.csproj",
+        "packagesPath": "C:\\Users\\1969a\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\1969a\\OneDrive\\Documents\\GitHub\\Project-5\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\1969a\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -86,7 +86,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }
