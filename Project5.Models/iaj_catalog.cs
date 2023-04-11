@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Project_5.Project5.Models;
 
-public partial class IajCatalog
+public partial class iaj_catalog
 {
-    public int Year { get; set; }
+    public int year { get; set; }
 }

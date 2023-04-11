@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Project_5.Project5.Models;
 
-public partial class Aspnetrole
+public partial class aspnetrole
 {
     public string Id { get; set; } = null!;
 
@@ -13,7 +13,7 @@ public partial class Aspnetrole
 
     public string? ConcurrencyStamp { get; set; }
 
-    public virtual ICollection<Aspnetroleclaim> Aspnetroleclaims { get; } = new List<Aspnetroleclaim>();
+    public virtual ICollection<aspnetroleclaim> aspnetroleclaims { get; } = new List<aspnetroleclaim>();
 
-    public virtual ICollection<Aspnetuser> Users { get; } = new List<Aspnetuser>();
+    public virtual ICollection<aspnetuser> Users { get; } = new List<aspnetuser>();
 }

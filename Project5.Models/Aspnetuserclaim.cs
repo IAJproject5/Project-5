@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Project_5.Project5.Models;
 
-public partial class Aspnetuserclaim
+public partial class aspnetuserclaim
 {
     public int Id { get; set; }
 
@@ -13,5 +13,5 @@ public partial class Aspnetuserclaim
 
     public string? ClaimValue { get; set; }
 
-    public virtual Aspnetuser User { get; set; } = null!;
+    public virtual aspnetuser User { get; set; } = null!;
 }

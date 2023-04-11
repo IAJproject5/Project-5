@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Project_5.Project5.Models;
 
-public partial class Aspnetusertoken
+public partial class aspnetusertoken
 {
     public string UserId { get; set; } = null!;
 
@@ -13,5 +13,5 @@ public partial class Aspnetusertoken
 
     public string? Value { get; set; }
 
-    public virtual Aspnetuser User { get; set; } = null!;
+    public virtual aspnetuser User { get; set; } = null!;
 }

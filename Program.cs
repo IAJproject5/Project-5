@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Project_5.Areas.Identity.Data;
 using Project_5.Data;
+using Microsoft.Extensions.Configuration;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("Project_5ContextConnection") ?? throw new InvalidOperationException("Connection string 'Project_5ContextConnection' not found.");
 
@@ -28,7 +29,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseAuthentication();;
+app.UseAuthentication();
 
 app.UseAuthorization();
 
@@ -40,3 +41,5 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 app.Run();
+
+public interface IConfiguration { }
