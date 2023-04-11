@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace Project_5.Project_5.Models;
+namespace Project_5.Project5.Models;
 
 public partial class Project_5Context : DbContext
 {
@@ -228,7 +228,7 @@ public partial class Project_5Context : DbContext
                 .HasMaxLength(20)
                 .HasColumnName("plan_name");
             entity.Property(e => e.UserId)
-                .HasColumnType("int(11)")
+                .HasMaxLength(255)
                 .HasColumnName("user_id");
         });
 
