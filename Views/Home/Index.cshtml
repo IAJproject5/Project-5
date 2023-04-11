@@ -1,5 +1,17 @@
 ﻿@{
+	@using Microsoft.AspNetCore.Identity
+	@using Project_5.Areas.Identity.Data
+	@using Microsoft.EntityFrameworkCore;
+	@using NuGet.Packaging.Signing;
+	@using Project_5.Project5.Models;
+	@using System.Collections;
+	@using System.Linq;
+	@inject SignInManager<Project_5User> SignInManager
+
+	@inject UserManager<Project_5User> UserManager
+
     ViewData["Title"] = "Home Page";
+	var thePlan = "";
 }
 
 <head>
@@ -33,14 +45,20 @@
 						<label for="rainbowSpeed">Speed</label>
 					</span>
 					@{
-						
+						var plans = new ArrayList();
+						var get = new GetQuery();
+						plans
+ = get.planIds(@UserManager.GetUserId(User));
+						thePlan = (string)plans[0];
+
+
 					}
 					<span class='header-column'>
 						<span id='major'><strong>Major: </strong><var>$studentMajor</var></span><br>
 						<span id='minor'><strong>Minor: </strong><var>$studentMinor</var></span>
 					</span>
 					<span class='header-column'>
-						<span id='student'><strong>Student: </strong><var>$studentName</var></span><br>
+						<span id='student'><strong>Student: </strong><var>@UserManager.GetUserName(User)</var></span><br>
 						<span id='catalog'><strong>Catalog: </strong><var>$catalogYear</var></span>
 					</span>
 				</div>
