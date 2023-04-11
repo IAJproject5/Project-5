@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace Project_5.Project-5.Models;
+namespace Project_5.Project5.Models;
 
 public partial class Project_5Context : DbContext
 {
@@ -52,7 +52,7 @@ public partial class Project_5Context : DbContext
             .UseCollation("utf8mb4_general_ci")
             .HasCharSet("utf8mb4");
 
-        modelBuilder.Entity<Aspnetrole>(entity =>
+        modelBuilder.Entity<Project.Aspnetrole>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
@@ -64,7 +64,7 @@ public partial class Project_5Context : DbContext
             entity.Property(e => e.NormalizedName).HasMaxLength(256);
         });
 
-        modelBuilder.Entity<Aspnetroleclaim>(entity =>
+        modelBuilder.Entity<Project.Aspnetroleclaim>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
@@ -79,7 +79,7 @@ public partial class Project_5Context : DbContext
                 .HasConstraintName("FK_AspNetRoleClaims_AspNetRoles_RoleId");
         });
 
-        modelBuilder.Entity<Aspnetuser>(entity =>
+        modelBuilder.Entity<Project.Aspnetuser>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
@@ -115,7 +115,7 @@ public partial class Project_5Context : DbContext
                     });
         });
 
-        modelBuilder.Entity<Aspnetuserclaim>(entity =>
+        modelBuilder.Entity<Project.Aspnetuserclaim>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
@@ -130,7 +130,7 @@ public partial class Project_5Context : DbContext
                 .HasConstraintName("FK_AspNetUserClaims_AspNetUsers_UserId");
         });
 
-        modelBuilder.Entity<Aspnetuserlogin>(entity =>
+        modelBuilder.Entity<Project.Aspnetuserlogin>(entity =>
         {
             entity.HasKey(e => new { e.LoginProvider, e.ProviderKey })
                 .HasName("PRIMARY")
@@ -148,7 +148,7 @@ public partial class Project_5Context : DbContext
                 .HasConstraintName("FK_AspNetUserLogins_AspNetUsers_UserId");
         });
 
-        modelBuilder.Entity<Aspnetusertoken>(entity =>
+        modelBuilder.Entity<Project.Aspnetusertoken>(entity =>
         {
             entity.HasKey(e => new { e.UserId, e.LoginProvider, e.Name })
                 .HasName("PRIMARY")
@@ -164,7 +164,7 @@ public partial class Project_5Context : DbContext
                 .HasConstraintName("FK_AspNetUserTokens_AspNetUsers_UserId");
         });
 
-        modelBuilder.Entity<Efmigrationshistory>(entity =>
+        modelBuilder.Entity<Project.Efmigrationshistory>(entity =>
         {
             entity.HasKey(e => e.MigrationId).HasName("PRIMARY");
 
@@ -174,7 +174,7 @@ public partial class Project_5Context : DbContext
             entity.Property(e => e.ProductVersion).HasMaxLength(32);
         });
 
-        modelBuilder.Entity<IajCatalog>(entity =>
+        modelBuilder.Entity<Project.IajCatalog>(entity =>
         {
             entity.HasKey(e => e.Year).HasName("PRIMARY");
 
@@ -186,7 +186,7 @@ public partial class Project_5Context : DbContext
                 .HasColumnName("year");
         });
 
-        modelBuilder.Entity<IajCourse>(entity =>
+        modelBuilder.Entity<Project.IajCourse>(entity =>
         {
             entity.HasKey(e => e.CourseId).HasName("PRIMARY");
 
@@ -209,7 +209,7 @@ public partial class Project_5Context : DbContext
                 .HasColumnName("prereq_id");
         });
 
-        modelBuilder.Entity<IajPlan>(entity =>
+        modelBuilder.Entity<Project.IajPlan>(entity =>
         {
             entity.HasKey(e => e.PlanId).HasName("PRIMARY");
 
@@ -232,7 +232,7 @@ public partial class Project_5Context : DbContext
                 .HasColumnName("user_id");
         });
 
-        modelBuilder.Entity<IajPlanCourse>(entity =>
+        modelBuilder.Entity<Project.IajPlanCourse>(entity =>
         {
             entity
                 .HasNoKey()
@@ -252,7 +252,7 @@ public partial class Project_5Context : DbContext
                 .HasColumnName("year");
         });
 
-        modelBuilder.Entity<IajPlanSubject>(entity =>
+        modelBuilder.Entity<Project.IajPlanSubject>(entity =>
         {
             entity
                 .HasNoKey()
@@ -269,7 +269,7 @@ public partial class Project_5Context : DbContext
                 .HasColumnName("type");
         });
 
-        modelBuilder.Entity<IajRequirement>(entity =>
+        modelBuilder.Entity<Project.IajRequirement>(entity =>
         {
             entity
                 .HasNoKey()
@@ -292,7 +292,7 @@ public partial class Project_5Context : DbContext
                 .HasColumnName("year");
         });
 
-        modelBuilder.Entity<IajSubject>(entity =>
+        modelBuilder.Entity<Project.IajSubject>(entity =>
         {
             entity.HasKey(e => new { e.Subject, e.Type })
                 .HasName("PRIMARY")
