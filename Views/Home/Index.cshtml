@@ -32,7 +32,16 @@
 						<input type="range" min="1" max="100" value="50" class="slider" id="rainbowSpeed" name="rainbowSpeed">
 						<label for="rainbowSpeed">Speed</label>
 					</span>
-					
+					@{
+						Project.IajSubject;
+						using Microsoft.EntityFrameworkCore;
+						namespace Project_5.Project5.Models;
+						using (var context = new Project.Project_5Context())
+						{
+							var tabs = context.Project_5Context.ToList();
+						}
+						Aspnetrole.get()
+					}
 					<span class='header-column'>
 						<span id='major'><strong>Major: </strong><var>$studentMajor</var></span><br>
 						<span id='minor'><strong>Minor: </strong><var>$studentMinor</var></span>
