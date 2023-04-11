@@ -153,6 +153,7 @@ h3 {
 
 #title {
     font-family: impact;
+    text-decoration: none;
     color: blue;
     margin: 4px;
     font-size: 2em;
