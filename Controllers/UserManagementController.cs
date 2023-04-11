@@ -9,16 +9,16 @@ namespace Project_5.Controllers
     //[Authorize(Roles = "Admin")]
     public class UserManagementController : Controller
     {
-        //private readonly UserManager<AppUser> userManager;
+        private readonly UserManager<Project_5User> userManager;
 
-        //public UserManagementController(UserManager<AppUser> usrMgr)
-        //{
-        //    userManager = usrMgr;
-        //}
+        public UserManagementController(UserManager<Project_5User> usrMgr)
+        {
+            userManager = usrMgr;
+        }
 
         public IActionResult Index()
         {
-            return View(/*userManager.Users*/);
+            return View(userManager.Users);
         }
     }
 }

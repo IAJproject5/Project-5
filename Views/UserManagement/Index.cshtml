@@ -1,4 +1,10 @@
-﻿<!--model IEnumerable<AppUser>-->
+﻿@using Microsoft.AspNetCore.Identity
+@using Project_5.Areas.Identity.Data
+
+@inject SignInManager<Project_5User> SignInManager
+@inject UserManager<Project_5User> UserManager
+
+@model IEnumerable<Project_5User>
 @{
     ViewData["Title"] = "User Management";
 }
@@ -7,14 +13,15 @@
 
 <a asp-action="Create" class="btn btn-secondary">Create a User</a>
 
-<!--<table class="table table-sm table-bordered">
+<table class="table table-sm table-bordered">
     <tr><th>ID</th><th>Name</th><th>Email</th></tr>
-    foreach (AppUser user in Model)
+    @foreach (Project_5User user in Model)
     {
         <tr>
-            <td>user.Id</td>
-            <td>user.UserName</td>
-            <td>user.Email</td>
+            <td>@user.Id</td>
+            <td>@user.UserName</td>
+            <td>@user.Email</td>
+            <td></td>
         </tr>
     }
-</table>-->
+</table>
