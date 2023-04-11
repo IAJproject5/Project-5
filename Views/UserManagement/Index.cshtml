@@ -1,0 +1,27 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Project_5.Areas.Identity.Data
+
+@inject SignInManager<Project_5User> SignInManager
+@inject UserManager<Project_5User> UserManager
+
+@model IEnumerable<Project_5User>
+@{
+    ViewData["Title"] = "User Management";
+}
+
+<h1>All Users</h1>
+
+<a asp-action="Create" class="btn btn-secondary">Create a User</a>
+
+<table class="table table-sm table-bordered">
+    <tr><th>ID</th><th>Name</th><th>Email</th></tr>
+    @foreach (Project_5User user in Model)
+    {
+        <tr>
+            <td>@user.Id</td>
+            <td>@user.UserName</td>
+            <td>@user.Email</td>
+            <td></td>
+        </tr>
+    }
+</table>

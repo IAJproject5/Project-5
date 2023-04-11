@@ -10,6 +10,18 @@ header {
     background-image: linear-gradient(to right, rgb(200, 220, 255), white);
 }
 
+footer {
+    font-family: arial;
+    font-size: 80%;
+    padding: 2px;
+    margin: 3px;
+    border: 1px solid blue;
+    border-radius: 4px;
+    background-image: linear-gradient(to right, rgb(200, 220, 255), white);
+    position: fixed;
+    bottom: 0;
+}
+
 .block-container {
     display: block;
     margin-top: 1em;
@@ -141,6 +153,7 @@ h3 {
 
 #title {
     font-family: impact;
+    text-decoration: none;
     color: blue;
     margin: 4px;
     font-size: 2em;
@@ -149,6 +162,10 @@ h3 {
 #version {
     font-family: arial;
     font-size: 0.6em;
+}
+
+#logoutForm {
+    display: inline;
 }
 
 .header-column {
@@ -160,11 +177,23 @@ h3 {
     margin: 4px 20px;
 }
 
-    .header-column button {
-        font-family: consolas;
-        border-radius: 4px;
-        background-image: linear-gradient(to right, rgb(220, 190, 50), rgb(255, 250, 30));
-    }
+.header-column button {
+    font-family: consolas;
+    border-radius: 4px;
+    background-image: linear-gradient(to right, rgb(220, 190, 50), rgb(255, 250, 30));
+}
+
+.header-column a {
+    text-decoration: none;
+    color: #333333;
+    padding: 2px 6px 2px 6px;
+    font: bold;
+    font-family: consolas;
+    border: 2px solid black;
+    border-radius: 4px;
+    margin: 4px;
+    background-image: linear-gradient(to right, rgb(220, 190, 50), rgb(255, 250, 30));
+}
 
 .schedule-ui button {
     font-family: consolas;
@@ -175,6 +204,19 @@ h3 {
 .header-column button:hover {
     font-family: consolas;
     border-radius: 4px;
+    background-image: linear-gradient(to right, rgb(250, 230, 50), rgb(255, 255, 255));
+    cursor: pointer;
+}
+
+.header-column a:hover {
+    text-decoration: none;
+    color: #333333;
+    padding: 2px 6px 2px 6px;
+    font: bold;
+    font-family: consolas;
+    border: 2px solid black;
+    border-radius: 4px;
+    margin: 4px;
     background-image: linear-gradient(to right, rgb(250, 230, 50), rgb(255, 255, 255));
     cursor: pointer;
 }
@@ -209,11 +251,11 @@ h3 {
     background-color: rgb(220, 230, 255);
 }
 
-    #accordion div {
-        background-color: rgb(200, 220, 255);
-        padding: 4px;
-        font-size: 100%;
-    }
+#accordion div {
+    background-color: rgb(200, 220, 255);
+    padding: 4px;
+    font-size: 100%;
+}
 
 .ui-accordion-header {
     padding: 4px;
@@ -231,25 +273,29 @@ h3 {
     background-color: rgb(220, 190, 50);
 }
 
-    .ui-accordion-header-collapsed:hover {
-        background-color: rgb(255, 255, 55);
-        cursor: pointer;
-    }
+.ui-accordion-header-collapsed:hover {
+    background-color: rgb(255, 255, 55);
+    cursor: pointer;
+}
 
-    .ui-accordion-header-collapsed:active {
-        background-color: rgb(255, 255, 255);
-        cursor: pointer;
-    }
+.ui-accordion-header-collapsed:active {
+    background-color: rgb(255, 255, 255);
+    cursor: pointer;
+}
 
 .ui-accordion-content {
     background-color: rgb(200, 220, 255);
 }
 
-    .ui-accordion-content p {
-        font-size: 75%;
-        margin: 2px;
-    }
+.ui-accordion-content p {
+    font-size: 75%;
+    margin: 2px;
+}
 
 .navigation {
     font-family: arial;
+}
+
+.login {
+    align-items: center;
 }
