@@ -34,6 +34,7 @@
 		var planCourseTerms = new ArrayList();
 		var planCourseYears = new ArrayList();
 		var requirements = new ArrayList();
+		var requirementCategories = new ArrayList();
 		var Q = new GetQuery();
 		var u = @UserManager.GetUserId(User);
 
@@ -51,6 +52,7 @@
 			planCourseTerms = Q.planCourseTerms(defaultID);
 			planCourseYears = Q.planCourseYears(defaultID);
 			requirements = Q.requirements(catalogYear, subjects, subjectTypes);
+			requirementCategories = Q.requirementCategories(catalogYear, subjects, subjectTypes);
 		}
 	}
 		<div class="grid-container">
