@@ -3,7 +3,44 @@
 
 @inject SignInManager<Project_5User> SignInManager
 @inject UserManager<Project_5User> UserManager
+@using Microsoft.EntityFrameworkCore;
+@using NuGet.Packaging.Signing;
+@using Project_5.Project5.Models;
+@using System.Collections;
+@using System.Linq;
+@inject SignInManager<Project_5User> SignInManager
 
+@inject UserManager<Project_5User> UserManager
+@{
+    var plans = new ArrayList();
+    var Q = new GetQuery();
+    var u = @UserManager.GetUserId(User);
+    plans = Q.planIds(u);
+    var thePlan = 0;
+    if (plans.Count > 0)
+    {
+        foreach (string a in plans){
+            thePlan = Int32.Parse(a);
+            break;
+        }
+    }
+    string majors = "";
+    string minors = "";
+    int i = 0;
+    var Types = new ArrayList();
+    Types = Q.subjectTypes(thePlan);
+    foreach (string subject in Q.subjects(thePlan))
+    {
+        if ((string)Types[i]=="Major")
+        {
+            majors+= subject + ", ";
+        } else {
+            minors+= subject + ", ";
+        }
+        i += 1;
+    }
+    var catalog = Q.catalogYear(thePlan.ToString());
+}
 @if (SignInManager.IsSignedIn(User))
 {
     <span class="header-column">
@@ -21,12 +58,12 @@
         <label for="rainbowSpeed">Speed</label>
     </span>
     <span class='header-column'>
-        <span id='major'><strong>Major: </strong><var>$studentMajor</var></span><br>
-        <span id='minor'><strong>Minor: </strong><var>$studentMinor</var></span>
+        <span id='major'><strong>Major: </strong><var>@majors</var></span><br>
+        <span id='minor'><strong>Minor: </strong><var>@minors</var></span>
     </span>
     <span class='header-column'>
-        <span id='student'><strong>Student: </strong><var>$studentName</var></span><br>
-        <span id='catalog'><strong>Catalog: </strong><var>$catalogYear</var></span>
+        <span id='student'><strong>Student: </strong><var>@UserManager.GetUserName(User)</var></span><br>
+        <span id='catalog'><strong>Catalog: </strong><var>@catalog</var></span>
     </span>
 }
 else

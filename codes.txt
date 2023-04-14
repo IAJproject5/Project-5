@@ -1,0 +1,124 @@
+drop table iaj_user;
+drop table iaj_catalog;
+drop table iaj_subjects;
+drop table iaj_plan_subjects;
+drop table iaj_course;
+drop table iaj_requirements;
+drop table iaj_plan;
+drop table iaj_plan_courses;
+
+
+create table iaj_catalog(
+year int primary key
+);
+
+create table iaj_subjects(
+subject varchar(50),
+type varchar(10) check(type in ('Major', 'Minor', 'Gen-Ed')),
+constraint primary key iaj_subjects(subject, type)
+);
+
+create table iaj_plan_subjects(
+plan_id varchar(255) references iaj_plan(plan_id),
+subject varchar(50) references iaj_subjects(subject),
+type varchar(10) references iaj_subjects(type)
+);
+
+create table iaj_course(
+course_id varchar(20) primary key,
+name varchar(50),
+description varchar(200),
+credits int,
+prereq_id varchar(20) references iaj_course(course_id)
+);
+
+create table iaj_requirements(
+year numeric(4,0),
+subject varchar(50) references iaj_subjects(subject),
+type varchar(10) references iaj_subjects(type),
+category varchar(20),
+course_id varchar(20) references iaj_course(course_id)
+);
+
+create table iaj_plan(
+plan_id varchar(20) primary key,
+user_id varchar(255) references aspnetusers(Id),
+plan_name varchar(20),
+catalog numeric(4,0) references catalog(year),
+default_plan varchar(20) CHECK(default_plan in ('true','false'))
+);
+
+create table iaj_plan_courses(
+plan_id varchar(20) references iaj_plan(plan_id),
+course_id varchar(20) references course(course_id),
+year int,
+term varchar(10)
+);
+
+
+insert into iaj_subjects values ('Computer Science', 'Major');
+insert into iaj_subjects values ('Bible', 'Major');
+insert into iaj_subjects values ('Bible', 'Minor');
+insert into iaj_subjects values ('Math','Minor');
+
+insert into iaj_plan_subjects values ('54321','Computer Science', 'Major');
+insert into iaj_plan_subjects values ('54321','Bible', 'Minor');
+insert into iaj_plan_subjects values ('54321','Math','Minor');
+insert into iaj_plan_subjects values ('54555','Bible', 'Major');
+
+
+insert into iaj_course values ('CS-101','Basics of Programming','Learn how to C++, Java, Python, all just a little bit, but not too much.','3',NULL);
+insert into iaj_course values ('BIO-101','How to Exist','You ever wonder how to be an organism? Here we share our secrets!','3',NULL);
+insert into iaj_course values ('BTGE-101','Bible Class','The Bible. What is it? Come to class and find out.','3',NULL);
+insert into iaj_course values ('BTGE-102','Bible 2','The sequel','6','NULL');
+insert into iaj_course values ('BTGE-103','Bible 3','The New New Testament','4.5','NULL');
+insert into iaj_course values ('BIO-3011','Advanced Existing','Take life to the next level.','5','BIO-101');
+insert into iaj_course values ('BIO-9523','Ascension','Tastes like grape','9','BIO-3011');
+insert into iaj_course values ('CS-308','Intermediate Programming','More of everything.','3','CS-101');
+insert into iaj_course values ('CS-555','Advanced Programming','Now with pointers!','6','CS-308');
+
+insert into iaj_requirements values ('2023','Computer Science','Major', 'Core','CS-101');
+insert into iaj_requirements values ('2023','Computer Science','Major','Track','CS-308');
+insert into iaj_requirements values ('2023','Computer Science','Major','Electives','CS-555');
+insert into iaj_requirements values ('2023','Biology','Gen-Ed','Electives','BIO-3011');
+insert into iaj_requirements values ('2023','Biology','Gen-Ed','Cognates','BIO-9523');
+insert into iaj_requirements values ('2023','Bible','Minor','GenEds','BTGE-101');
+insert into iaj_requirements values ('2023','Bible','Major','Core','BTGE-101');
+insert into iaj_requirements values ('2023','Bible','Major','Electives','BTGE-102');
+insert into iaj_requirements values ('2023','Bible','Major','Cognates','BTGE-103');
+insert into iaj_plan values ('54321','012c3b14-429f-4c35-9808-70746c7aa23e','My Plan', '2023','true');
+insert into iaj_plan values ('54555','012c3b14-429f-4c35-9808-70746c7aa23e','My 2nd Plan','2023','false');
+insert into iaj_plan_courses values ('54321','BIO-101','2023','fall');
+insert into iaj_plan_courses values ('54321','BTGE-101','2024','spring');
+insert into iaj_plan_courses values ('54321','BIO-3011','2024','fall');
+insert into iaj_plan_courses values ('54321','BIO-9523','2025','spring');
+insert into iaj_plan_courses values ('54555','CS-101','2023','fall');
+insert into iaj_plan_courses values ('54555','CS-308','2024','spring');
+insert into iaj_plan_courses values ('54555','CS-555','2024','fall');
+insert into iaj_plan_courses values ('54555','BIO-101','2025','spring');
+
+
+insert into iaj_plan values ('11111','7703870f-6c74-4b83-8f3c-a0a7df64429d','My Plan', '2023','true');
+insert into iaj_plan values ('22222','2a2c4615-f722-4ca4-a9f9-c2735880e51d','My Plan', '2023','true');
+insert into iaj_plan_subjects values ('11111','Bible', 'Major');
+insert into iaj_plan_subjects values ('11111','Computer Science', 'Minor');
+insert into iaj_plan_subjects values ('22222','Math','Major');
+
+
+
+Register: 
+Bob@Builder.com - WeC@nBu1ldIt	- 7703870f-6c74-4b83-8f3c-a0a7df64429d
+Puff@Magic.com - R@wr1ng		- 012c3b14-429f-4c35-9808-70746c7aa23e
+Steve@Craft.com - D1gingD@wn		- 2a2c4615-f722-4ca4-a9f9-c2735880e51d
+
+
+insert into iaj_user values ('12345','Bob The Builder','$2a$12$RP0tfqLQHztg/mFo2pmNUe6NcFk.5iZVSmVolbCT16NtRSk52CK5m');
+insert into iaj_user values ('52312','Puff The Magic Dragon', '$2a$12$F07MdPMNe2/vIw5EmKl4eOwWSrPu5ssIbVloj5.RY36VJ2sxZxCne');
+insert into iaj_user values ('44444','Steve', '$2a$12$nutYIqO5yin7S2NM582x0et.dv3wR3g.8IbmElhI54NdzWH.oJVT.');
+insert into iaj_catalog values ('2023');
+
+create table iaj_user(
+ID int primary key,
+name varchar(50),
+password varchar(200)
+);

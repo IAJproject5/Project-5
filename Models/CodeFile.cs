@@ -3,21 +3,24 @@ using NuGet.Packaging.Signing;
 using Project_5.Project5.Models;
 using System.Collections;
 using System.Linq;
-
 public class GetQuery
 {
+	protected void IConfiguration(DbContextOptionsBuilder optionsBuilder)
+	{
+		optionsBuilder.UseMySql("name=ConnectionStrings:Project_5ContextConnection", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.4.27-mariadb"));
+	}
 	public ArrayList planIds(string uID)
 	{
 		using (var context = new Project_5Context())
 		{
-			var ids = from a in context.IajPlans
-										where a.UserId == uID
-										select a.PlanId;
+			var ids = from a in context.iaj_plans
+										where a.user_id == uID
+										select a.plan_id;
 			int i = 0;
 			var varlist = new ArrayList();
 			foreach (string var in ids)
 			{
-				varlist[i] = var;
+				varlist.Add(var);
 				i += 1;
 			}
 			return varlist;
@@ -28,9 +31,9 @@ public class GetQuery
 	{
 		using (var context = new Project_5Context())
 		{
-			var name = from a in context.IajPlans
-					   where a.UserId == pID
-					  select a.PlanName;
+			var name = from a in context.iaj_plans
+					   where a.user_id == pID
+					  select a.plan_name;
 			foreach (string var in name)
 			{
 				return var;
@@ -42,9 +45,9 @@ public class GetQuery
 	{
 		using (var context = new Project_5Context())
 		{
-			var years = from a in context.IajPlanCourses
-					   where a.PlanId == pID
-					   select a.Year;
+			var years = from a in context.iaj_plan_courses
+					   where a.plan_id == pID
+					   select a.year;
 			foreach (int year in years)
 			{
 				return year;
@@ -56,14 +59,14 @@ public class GetQuery
 	{
 		using (var context = new Project_5Context())
 		{
-			var subjects = from a in context.IajPlanSubjects
-					  where a.PlanId == pID
-					  select a.Subject;
+			var subjects = from a in context.iaj_plan_subjects
+					  where a.plan_id == pID
+					  select a.subject;
 			int i = 0;
 			var varlist = new ArrayList();
 			foreach (string subject in subjects)
 			{
-				varlist[i] = subject;
+				varlist.Add(subject);
 				i += 1;
 			}
 			return varlist;
@@ -73,18 +76,17 @@ public class GetQuery
 	{
 		using (var context = new Project_5Context())
 		{
-			var types = from a in context.IajPlanSubjects
-					  where a.PlanId == pID
-					  select a.Type;
+			var types = from a in context.iaj_plan_subjects
+					  where a.plan_id == pID
+					  select a.type;
 			int i = 0;
 			var varlist = new ArrayList();
 			foreach (string type in types)
 			{
-				varlist[i] = type;
+				varlist.Add(type);
 				i += 1;
 			}
 			return varlist;
 		}
 	}
-	//Needed? Requirements? Courses?
 }
