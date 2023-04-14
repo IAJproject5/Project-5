@@ -15,48 +15,64 @@ public partial class Project_5Context : DbContext
     {
     }
 
-    public virtual DbSet<Aspnetrole> Aspnetroles { get; set; }
+    public virtual DbSet<__efmigrationshistory> __efmigrationshistories { get; set; }
 
-    public virtual DbSet<Aspnetroleclaim> Aspnetroleclaims { get; set; }
+    public virtual DbSet<aspnetrole> aspnetroles { get; set; }
 
-    public virtual DbSet<Aspnetuser> Aspnetusers { get; set; }
+    public virtual DbSet<aspnetroleclaim> aspnetroleclaims { get; set; }
 
-    public virtual DbSet<Aspnetuserclaim> Aspnetuserclaims { get; set; }
+    public virtual DbSet<aspnetuser> aspnetusers { get; set; }
 
-    public virtual DbSet<Aspnetuserlogin> Aspnetuserlogins { get; set; }
+    public virtual DbSet<aspnetuserclaim> aspnetuserclaims { get; set; }
 
-    public virtual DbSet<Aspnetusertoken> Aspnetusertokens { get; set; }
+    public virtual DbSet<aspnetuserlogin> aspnetuserlogins { get; set; }
 
-    public virtual DbSet<Efmigrationshistory> Efmigrationshistories { get; set; }
+    public virtual DbSet<aspnetusertoken> aspnetusertokens { get; set; }
 
-    public virtual DbSet<IajCatalog> IajCatalogs { get; set; }
+    public virtual DbSet<iaj_catalog> iaj_catalogs { get; set; }
 
-    public virtual DbSet<IajCourse> IajCourses { get; set; }
+    public virtual DbSet<iaj_course> iaj_courses { get; set; }
 
-    public virtual DbSet<IajPlan> IajPlans { get; set; }
+    public virtual DbSet<iaj_plan> iaj_plans { get; set; }
 
-    public virtual DbSet<IajPlanCourse> IajPlanCourses { get; set; }
+    public virtual DbSet<iaj_plan_course> iaj_plan_courses { get; set; }
 
-    public virtual DbSet<IajPlanSubject> IajPlanSubjects { get; set; }
+    public virtual DbSet<iaj_plan_subject> iaj_plan_subjects { get; set; }
 
-    public virtual DbSet<IajRequirement> IajRequirements { get; set; }
+    public virtual DbSet<iaj_requirement> iaj_requirements { get; set; }
 
-    public virtual DbSet<IajSubject> IajSubjects { get; set; }
+    public virtual DbSet<iaj_subject> iaj_subjects { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseMySql("name=ConnectionStrings:Project_5ContextConnection", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.4.27-mariadb"));
+	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+	{
+		var config = new ConfigurationBuilder()
+			.SetBasePath(Directory.GetCurrentDirectory())
+			.AddJsonFile("appsettings.json")
+			.Build();
+		var connectionString = config.GetConnectionString("Project_5ContextConnection");
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+		optionsBuilder.UseMySql(connectionString, Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.4.27-mariadb"));
+	}
+
+	protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
             .UseCollation("utf8mb4_general_ci")
             .HasCharSet("utf8mb4");
 
-        modelBuilder.Entity<Aspnetrole>(entity =>
+        modelBuilder.Entity<__efmigrationshistory>(entity =>
+        {
+            entity.HasKey(e => e.MigrationId).HasName("PRIMARY");
+
+            entity.ToTable("__efmigrationshistory");
+
+            entity.Property(e => e.MigrationId).HasMaxLength(150);
+            entity.Property(e => e.ProductVersion).HasMaxLength(32);
+        });
+
+        modelBuilder.Entity<aspnetrole>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("aspnetroles");
 
             entity.HasIndex(e => e.NormalizedName, "RoleNameIndex").IsUnique();
 
@@ -64,26 +80,22 @@ public partial class Project_5Context : DbContext
             entity.Property(e => e.NormalizedName).HasMaxLength(256);
         });
 
-        modelBuilder.Entity<Aspnetroleclaim>(entity =>
+        modelBuilder.Entity<aspnetroleclaim>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("aspnetroleclaims");
 
             entity.HasIndex(e => e.RoleId, "IX_AspNetRoleClaims_RoleId");
 
             entity.Property(e => e.Id).HasColumnType("int(11)");
 
-            entity.HasOne(d => d.Role).WithMany(p => p.Aspnetroleclaims)
+            entity.HasOne(d => d.Role).WithMany(p => p.aspnetroleclaims)
                 .HasForeignKey(d => d.RoleId)
                 .HasConstraintName("FK_AspNetRoleClaims_AspNetRoles_RoleId");
         });
 
-        modelBuilder.Entity<Aspnetuser>(entity =>
+        modelBuilder.Entity<aspnetuser>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("aspnetusers");
 
             entity.HasIndex(e => e.NormalizedEmail, "EmailIndex");
 
@@ -98,11 +110,11 @@ public partial class Project_5Context : DbContext
 
             entity.HasMany(d => d.Roles).WithMany(p => p.Users)
                 .UsingEntity<Dictionary<string, object>>(
-                    "Aspnetuserrole",
-                    r => r.HasOne<Aspnetrole>().WithMany()
+                    "aspnetuserrole",
+                    r => r.HasOne<aspnetrole>().WithMany()
                         .HasForeignKey("RoleId")
                         .HasConstraintName("FK_AspNetUserRoles_AspNetRoles_RoleId"),
-                    l => l.HasOne<Aspnetuser>().WithMany()
+                    l => l.HasOne<aspnetuser>().WithMany()
                         .HasForeignKey("UserId")
                         .HasConstraintName("FK_AspNetUserRoles_AspNetUsers_UserId"),
                     j =>
@@ -115,197 +127,124 @@ public partial class Project_5Context : DbContext
                     });
         });
 
-        modelBuilder.Entity<Aspnetuserclaim>(entity =>
+        modelBuilder.Entity<aspnetuserclaim>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("aspnetuserclaims");
 
             entity.HasIndex(e => e.UserId, "IX_AspNetUserClaims_UserId");
 
             entity.Property(e => e.Id).HasColumnType("int(11)");
 
-            entity.HasOne(d => d.User).WithMany(p => p.Aspnetuserclaims)
+            entity.HasOne(d => d.User).WithMany(p => p.aspnetuserclaims)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK_AspNetUserClaims_AspNetUsers_UserId");
         });
 
-        modelBuilder.Entity<Aspnetuserlogin>(entity =>
+        modelBuilder.Entity<aspnetuserlogin>(entity =>
         {
             entity.HasKey(e => new { e.LoginProvider, e.ProviderKey })
                 .HasName("PRIMARY")
                 .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
-
-            entity.ToTable("aspnetuserlogins");
 
             entity.HasIndex(e => e.UserId, "IX_AspNetUserLogins_UserId");
 
             entity.Property(e => e.LoginProvider).HasMaxLength(128);
             entity.Property(e => e.ProviderKey).HasMaxLength(128);
 
-            entity.HasOne(d => d.User).WithMany(p => p.Aspnetuserlogins)
+            entity.HasOne(d => d.User).WithMany(p => p.aspnetuserlogins)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK_AspNetUserLogins_AspNetUsers_UserId");
         });
 
-        modelBuilder.Entity<Aspnetusertoken>(entity =>
+        modelBuilder.Entity<aspnetusertoken>(entity =>
         {
             entity.HasKey(e => new { e.UserId, e.LoginProvider, e.Name })
                 .HasName("PRIMARY")
                 .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0, 0 });
 
-            entity.ToTable("aspnetusertokens");
-
             entity.Property(e => e.LoginProvider).HasMaxLength(128);
             entity.Property(e => e.Name).HasMaxLength(128);
 
-            entity.HasOne(d => d.User).WithMany(p => p.Aspnetusertokens)
+            entity.HasOne(d => d.User).WithMany(p => p.aspnetusertokens)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK_AspNetUserTokens_AspNetUsers_UserId");
         });
 
-        modelBuilder.Entity<Efmigrationshistory>(entity =>
+        modelBuilder.Entity<iaj_catalog>(entity =>
         {
-            entity.HasKey(e => e.MigrationId).HasName("PRIMARY");
-
-            entity.ToTable("__efmigrationshistory");
-
-            entity.Property(e => e.MigrationId).HasMaxLength(150);
-            entity.Property(e => e.ProductVersion).HasMaxLength(32);
-        });
-
-        modelBuilder.Entity<IajCatalog>(entity =>
-        {
-            entity.HasKey(e => e.Year).HasName("PRIMARY");
+            entity.HasKey(e => e.year).HasName("PRIMARY");
 
             entity.ToTable("iaj_catalog");
 
-            entity.Property(e => e.Year)
+            entity.Property(e => e.year)
                 .ValueGeneratedNever()
-                .HasColumnType("int(11)")
-                .HasColumnName("year");
+                .HasColumnType("int(11)");
         });
 
-        modelBuilder.Entity<IajCourse>(entity =>
+        modelBuilder.Entity<iaj_course>(entity =>
         {
-            entity.HasKey(e => e.CourseId).HasName("PRIMARY");
+            entity.HasKey(e => e.course_id).HasName("PRIMARY");
 
             entity.ToTable("iaj_course");
 
-            entity.Property(e => e.CourseId)
-                .HasMaxLength(20)
-                .HasColumnName("course_id");
-            entity.Property(e => e.Credits)
-                .HasColumnType("int(11)")
-                .HasColumnName("credits");
-            entity.Property(e => e.Description)
-                .HasMaxLength(200)
-                .HasColumnName("description");
-            entity.Property(e => e.Name)
-                .HasMaxLength(50)
-                .HasColumnName("name");
-            entity.Property(e => e.PrereqId)
-                .HasMaxLength(20)
-                .HasColumnName("prereq_id");
+            entity.Property(e => e.course_id).HasMaxLength(20);
+            entity.Property(e => e.credits).HasColumnType("int(11)");
+            entity.Property(e => e.description).HasMaxLength(200);
+            entity.Property(e => e.name).HasMaxLength(50);
+            entity.Property(e => e.prereq_id).HasMaxLength(20);
         });
 
-        modelBuilder.Entity<IajPlan>(entity =>
+        modelBuilder.Entity<iaj_plan>(entity =>
         {
-            entity.HasKey(e => e.PlanId).HasName("PRIMARY");
+            entity.HasKey(e => e.plan_id).HasName("PRIMARY");
 
             entity.ToTable("iaj_plan");
 
-            entity.Property(e => e.PlanId)
-                .HasMaxLength(20)
-                .HasColumnName("plan_id");
-            entity.Property(e => e.Catalog)
-                .HasPrecision(4)
-                .HasColumnName("catalog");
-            entity.Property(e => e.DefaultPlan)
-                .HasMaxLength(20)
-                .HasColumnName("default_plan");
-            entity.Property(e => e.PlanName)
-                .HasMaxLength(20)
-                .HasColumnName("plan_name");
-            entity.Property(e => e.UserId)
-                .HasMaxLength(255)
-                .HasColumnName("user_id");
+            entity.Property(e => e.plan_id).HasMaxLength(20);
+            entity.Property(e => e.catalog).HasPrecision(4);
+            entity.Property(e => e.default_plan).HasMaxLength(20);
+            entity.Property(e => e.plan_name).HasMaxLength(20);
+            entity.Property(e => e.user_id).HasMaxLength(255);
         });
 
-        modelBuilder.Entity<IajPlanCourse>(entity =>
+        modelBuilder.Entity<iaj_plan_course>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("iaj_plan_courses");
+            entity.HasNoKey();
 
-            entity.Property(e => e.CourseId)
-                .HasMaxLength(20)
-                .HasColumnName("course_id");
-            entity.Property(e => e.PlanId)
-                .HasMaxLength(20)
-                .HasColumnName("plan_id");
-            entity.Property(e => e.Term)
-                .HasMaxLength(10)
-                .HasColumnName("term");
-            entity.Property(e => e.Year)
-                .HasColumnType("int(11)")
-                .HasColumnName("year");
+            entity.Property(e => e.course_id).HasMaxLength(20);
+            entity.Property(e => e.plan_id).HasMaxLength(20);
+            entity.Property(e => e.term).HasMaxLength(10);
+            entity.Property(e => e.year).HasColumnType("int(11)");
         });
 
-        modelBuilder.Entity<IajPlanSubject>(entity =>
+        modelBuilder.Entity<iaj_plan_subject>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("iaj_plan_subjects");
+            entity.HasNoKey();
 
-            entity.Property(e => e.PlanId)
-                .HasColumnType("int(11)")
-                .HasColumnName("plan_id");
-            entity.Property(e => e.Subject)
-                .HasMaxLength(50)
-                .HasColumnName("subject");
-            entity.Property(e => e.Type)
-                .HasMaxLength(10)
-                .HasColumnName("type");
+            entity.Property(e => e.plan_id).HasColumnType("int(11)");
+            entity.Property(e => e.subject).HasMaxLength(50);
+            entity.Property(e => e.type).HasMaxLength(10);
         });
 
-        modelBuilder.Entity<IajRequirement>(entity =>
+        modelBuilder.Entity<iaj_requirement>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("iaj_requirements");
+            entity.HasNoKey();
 
-            entity.Property(e => e.Category)
-                .HasMaxLength(20)
-                .HasColumnName("category");
-            entity.Property(e => e.CourseId)
-                .HasMaxLength(20)
-                .HasColumnName("course_id");
-            entity.Property(e => e.Subject)
-                .HasMaxLength(50)
-                .HasColumnName("subject");
-            entity.Property(e => e.Type)
-                .HasMaxLength(10)
-                .HasColumnName("type");
-            entity.Property(e => e.Year)
-                .HasPrecision(4)
-                .HasColumnName("year");
+            entity.Property(e => e.category).HasMaxLength(20);
+            entity.Property(e => e.course_id).HasMaxLength(20);
+            entity.Property(e => e.subject).HasMaxLength(50);
+            entity.Property(e => e.type).HasMaxLength(10);
+            entity.Property(e => e.year).HasPrecision(4);
         });
 
-        modelBuilder.Entity<IajSubject>(entity =>
+        modelBuilder.Entity<iaj_subject>(entity =>
         {
-            entity.HasKey(e => new { e.Subject, e.Type })
+            entity.HasKey(e => new { e.subject, e.type })
                 .HasName("PRIMARY")
                 .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
 
-            entity.ToTable("iaj_subjects");
-
-            entity.Property(e => e.Subject)
-                .HasMaxLength(50)
-                .HasColumnName("subject");
-            entity.Property(e => e.Type)
-                .HasMaxLength(10)
-                .HasColumnName("type");
+            entity.Property(e => e.subject).HasMaxLength(50);
+            entity.Property(e => e.type).HasMaxLength(10);
         });
 
         OnModelCreatingPartial(modelBuilder);

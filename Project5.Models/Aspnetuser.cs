@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Project_5.Project5.Models;
 
-public partial class Aspnetuser
+public partial class aspnetuser
 {
     public string Id { get; set; } = null!;
 
@@ -35,11 +35,11 @@ public partial class Aspnetuser
 
     public int AccessFailedCount { get; set; }
 
-    public virtual ICollection<Aspnetuserclaim> Aspnetuserclaims { get; } = new List<Aspnetuserclaim>();
+    public virtual ICollection<aspnetuserclaim> aspnetuserclaims { get; } = new List<aspnetuserclaim>();
 
-    public virtual ICollection<Aspnetuserlogin> Aspnetuserlogins { get; } = new List<Aspnetuserlogin>();
+    public virtual ICollection<aspnetuserlogin> aspnetuserlogins { get; } = new List<aspnetuserlogin>();
 
-    public virtual ICollection<Aspnetusertoken> Aspnetusertokens { get; } = new List<Aspnetusertoken>();
+    public virtual ICollection<aspnetusertoken> aspnetusertokens { get; } = new List<aspnetusertoken>();
 
-    public virtual ICollection<Aspnetrole> Roles { get; } = new List<Aspnetrole>();
+    public virtual ICollection<aspnetrole> Roles { get; } = new List<aspnetrole>();
 }

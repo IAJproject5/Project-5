@@ -1,5 +1,17 @@
 ﻿@{
+	@using Microsoft.AspNetCore.Identity
+	@using Project_5.Areas.Identity.Data
+	@using Microsoft.EntityFrameworkCore;
+	@using NuGet.Packaging.Signing;
+	@using Project_5.Project5.Models;
+	@using System.Collections;
+	@using System.Linq;
+	@inject SignInManager<Project_5User> SignInManager
+
+	@inject UserManager<Project_5User> UserManager
+
     ViewData["Title"] = "Home Page";
+	var thePlan = "";
 }
 
 <head>
@@ -14,38 +26,33 @@
 	<meta charset="utf-8">
 </head>
 <body>
-	<div id="app-container">
-		<header>
-			<div id="header">
-				<span id="title"><em>Academic Planning Environment</em></span>
-				<span id="version"><em>Version 4.0</em></span>
-				<div id="headerItems">
-					<span class="header-column">
-						<button id="logout"><strong>Log Out</strong></button>
-						<button id="options"><strong>Options</strong></button>
-						<button id="save"><strong>Save</strong></button>
-						<input type="checkbox" id="colorCheck" name="colorCheck" value="colorCheck">
-						<label for="colorCheck">More Colors?</label>
-						<input type="color" id="colors" name="colors">
-						<input type="checkbox" id="rainbow" name="rainbow" value="rainbow">
-						<label for="colorCheck">Rainbow</label>
-						<input type="range" min="1" max="100" value="50" class="slider" id="rainbowSpeed" name="rainbowSpeed">
-						<label for="rainbowSpeed">Speed</label>
-					</span>
-					@{
-						
-					}
-					<span class='header-column'>
-						<span id='major'><strong>Major: </strong><var>$studentMajor</var></span><br>
-						<span id='minor'><strong>Minor: </strong><var>$studentMinor</var></span>
-					</span>
-					<span class='header-column'>
-						<span id='student'><strong>Student: </strong><var>$studentName</var></span><br>
-						<span id='catalog'><strong>Catalog: </strong><var>$catalogYear</var></span>
-					</span>
-				</div>
-			</div>
-		</header>
+	@{
+		var plans = new ArrayList();
+		var subjects = new ArrayList();
+		var subjectTypes = new ArrayList();
+		var planCourses = new ArrayList();
+		var planCourseTerms = new ArrayList();
+		var planCourseYears = new ArrayList();
+		var requirements = new ArrayList();
+		var Q = new GetQuery();
+		var u = @UserManager.GetUserId(User);
+
+		plans = Q.planIds(u);
+		string defaultID = (string)plans[0];
+
+		if(defaultID != null)
+		{
+			string planName = Q.planName(defaultID);
+			int catalogYear = Q.catalogYear(defaultID);
+			subjects = Q.subjects(int.Parse(defaultID));
+			subjectTypes = Q.subjectTypes(int.Parse(defaultID));
+
+			planCourses = Q.planCourses(defaultID);
+			planCourseTerms = Q.planCourseTerms(defaultID);
+			planCourseYears = Q.planCourseYears(defaultID);
+			requirements = Q.requirements(catalogYear, subjects, subjectTypes);
+		}
+	}
 		<div class="grid-container">
 			<div class="grid-item" id="ul-container">
 				<div class="section-header">
