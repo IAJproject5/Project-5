@@ -95,7 +95,7 @@ function sumCreditHours(courses) {
 	}
 	return sum;
 }
-
+/*
 function generateScheduleHTML(plan) {
 	let returnHTML = "";
 	let yearsFormatted = planToYears(plan);
@@ -144,7 +144,7 @@ function generateScheduleHeader(plan) {
 	returnHTML = "<h2>Academic Plan: " + plan.name + "</h2>";
 	return returnHTML;
 }
-
+*//*
 function externalPlanHandler() {
 	if (this.status === 200) {
 		let returnPlan = new Plan("John Smith's Plan", 0, "", "John Smith", "");
@@ -158,7 +158,7 @@ function externalPlanHandler() {
 		returnPlan.currentSemester = "" + externalPlan.currTerm + " " + externalPlan.currYear;
 		returnPlan.studentName = externalPlan.student;
 		let currentCourse;
-		/*for (const courseKey in (currentCatalog.courses)) {
+		*//*for (const courseKey in (currentCatalog.courses)) {
 				returnPlan.courses.push(new Course(
 					courseKey,
 					currentCatalog.courses[courseKey].name,
@@ -168,7 +168,7 @@ function externalPlanHandler() {
 					console.log(Object.getOwnPropertyNames(currentCatalog.courses[courseKey]))
 					)
 				);
-		}*/
+		}*//*
 
 		for (let courseKey in externalPlan.courses) {
 			//console.log(courseKey)
@@ -282,7 +282,7 @@ function loadRequirements() {
 		}
 	}
 	$(".geneds").html(genEdsHTML + "</p>");
-}
+}*/
 
 function searchCourses() {
 	let notValid = /[^\w" "+-]/;
@@ -334,7 +334,9 @@ function init() {
 	pageScheduleContainer = document.getElementsByClassName("schedule-container")[0];
 	pageScheduleHeader = document.getElementById("schedule-header");
 
-	let xhr = new XMLHttpRequest();
+	
+
+	/*let xhr = new XMLHttpRequest();
 	let xhrReq;
 
 	xhr.addEventListener("load", externalPlanHandler);
@@ -349,7 +351,7 @@ function init() {
 			xhrReq.send();
 		}
 	}
-	xhr.send();
+	xhr.send();*/
 
 	styleLateInit();
 }

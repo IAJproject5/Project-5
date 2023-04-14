@@ -26,12 +26,33 @@
 	<meta charset="utf-8">
 </head>
 <body>
-					@{
-						var plans = new ArrayList();
-						var Q = new GetQuery();
-						var u = @UserManager.GetUserId(User);
-						plans = Q.planIds(u);
-					}
+	@{
+		var plans = new ArrayList();
+		var subjects = new ArrayList();
+		var subjectTypes = new ArrayList();
+		var planCourses = new ArrayList();
+		var planCourseTerms = new ArrayList();
+		var planCourseYears = new ArrayList();
+		var requirements = new ArrayList();
+		var Q = new GetQuery();
+		var u = @UserManager.GetUserId(User);
+
+		plans = Q.planIds(u);
+		string defaultID = (string)plans[0];
+
+		if(defaultID != null)
+		{
+			string planName = Q.planName(defaultID);
+			int catalogYear = Q.catalogYear(defaultID);
+			subjects = Q.subjects(int.Parse(defaultID));
+			subjectTypes = Q.subjectTypes(int.Parse(defaultID));
+
+			planCourses = Q.planCourses(defaultID);
+			planCourseTerms = Q.planCourseTerms(defaultID);
+			planCourseYears = Q.planCourseYears(defaultID);
+			requirements = Q.requirements(catalogYear, subjects, subjectTypes);
+		}
+	}
 		<div class="grid-container">
 			<div class="grid-item" id="ul-container">
 				<div class="section-header">
