@@ -26,14 +26,47 @@ public class GetQuery
 			return varlist;
 		}
 	}
+	public ArrayList planNames(string uID)
+	{
+		using (var context = new Project_5Context())
+		{
+			var names = from a in context.iaj_plans
+					  where a.user_id == uID
+					  select a.plan_name;
+			int i = 0;
+			var varlist = new ArrayList();
+			foreach (string var in names)
+			{
+				varlist.Add(var);
+				i += 1;
+			}
+			return varlist;
+		}
+	}
 	//May need to be changed to only return 1.
 	public string planName(string pID)
 	{
 		using (var context = new Project_5Context())
 		{
 			var name = from a in context.iaj_plans
-					   where a.user_id == pID
+					   where a.plan_id == pID
 					  select a.plan_name;
+			foreach (string var in name)
+			{
+				return var;
+			}
+			return "";
+		}
+	}
+	public string defaultPlan(string uID)
+	{
+		using (var context = new Project_5Context())
+		{
+			var name = from a in context.iaj_plans
+					  where(a.user_id == uID && a.default_plan == "true")
+					  select a.plan_name;
+			int i = 0;
+			var varlist = new ArrayList();
 			foreach (string var in name)
 			{
 				return var;

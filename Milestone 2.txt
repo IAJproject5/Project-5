@@ -1,0 +1,5 @@
+I forgot this was in the assignments section and I submitted a comment on the main Project. It read as follows:
+Our goals weren’t perfect but we have the learning base for the player and we’re almost there with the observer so I’d say we’re on track
+
+Here is the link to our github: https://github.com/bweiss5206/Overseer.ai/tree/master
+We did most of our progress on the "Trained" branch
