@@ -29,6 +29,7 @@
 <body>
 	@{
 		var plans = new ArrayList();
+		var planIDs = new ArrayList();
 		var subjects = new ArrayList();
 		var subjectTypes = new ArrayList();
 		var planCourses = new ArrayList();
@@ -36,10 +37,12 @@
 		var planCourseYears = new ArrayList();
 		var requirements = new ArrayList();
 		var requirementCategories = new ArrayList();
-		
+
 		var Q = new GetQuery();
 		var u = @UserManager.GetUserId(User);
+
 		plans = Q.planNames(u);
+		planIDs = Q.planIds(u);
 		HttpClient client = new HttpClient();
 		//var responseString = await client.GetStringAsync("https://localhost:7019/");
 		string choice;
@@ -57,12 +60,12 @@
 		{
 			thePlan = Q.defaultPlan(u);
 		}
-			/*if (responseString != null)
+		/*if (responseString != null)
 		{
-			thePlan = responseString;
+		thePlan = responseString;
 		}*/
-    
-    /*string defaultID = (string)plans[0];
+
+		string defaultID = planIDs[plans.IndexOf(thePlan)].ToString();
 
 		if(defaultID != null)
 		{
@@ -76,7 +79,8 @@
 			planCourseYears = Q.planCourseYears(defaultID);
 			requirements = Q.requirements(catalogYear, subjects, subjectTypes);
 			requirementCategories = Q.requirementCategories(catalogYear, subjects, subjectTypes);
-		}*/
+			Console.Write(planName + " -- " + planCourses[0]);
+		}
 	}
 	<div class="grid-container">
 		<div class="grid-item" id="ul-container">
