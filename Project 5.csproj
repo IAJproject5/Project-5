@@ -8,6 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="xampp\htdocs\php\getCombined.php" />
+    <Content Include="xampp\htdocs\php\getRequirements.php" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.4" />
