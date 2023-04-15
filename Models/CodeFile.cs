@@ -102,6 +102,7 @@ public class GetQuery
 				varlist.Add(subject);
 				i += 1;
 			}
+			varlist.TrimToSize();
 			return varlist;
 		}
 	}
@@ -121,5 +122,107 @@ public class GetQuery
 			}
 			return varlist;
 		}
+	}
+
+	public ArrayList planCourses(string pID)
+	{
+		using (var context = new Project_5Context())
+		{
+			var courses = from a in context.iaj_plan_courses
+					  where a.plan_id == pID
+					  select a.course_id;
+			int i = 0;
+			var varlist = new ArrayList();
+			foreach (string course in courses)
+			{
+				varlist.Add(course);
+				i += 1;
+			}
+			return varlist;
+		}
+	}
+
+	public ArrayList planCourseTerms(string pID)
+	{
+		using (var context = new Project_5Context())
+		{
+			var terms = from a in context.iaj_plan_courses
+						  where a.plan_id == pID
+						  select a.term;
+			int i = 0;
+			var varlist = new ArrayList();
+			foreach (string term in terms)
+			{
+				varlist.Add(term);
+				i += 1;
+			}
+			return varlist;
+		}
+	}
+
+	public ArrayList planCourseYears(string pID)
+	{
+		using (var context = new Project_5Context())
+		{
+			var years = from a in context.iaj_plan_courses
+						  where a.plan_id == pID
+						  select a.year;
+			int i = 0;
+			var varlist = new ArrayList();
+			foreach (int year in years)
+			{
+				varlist.Add(year);
+				i += 1;
+			}
+			return varlist;
+		}
+	}
+
+	public ArrayList requirements(int year, ArrayList subjects, ArrayList subjectTypes)
+	{
+
+		int i = 0;
+		var varlist = new ArrayList();
+		for (int j = 0; j < subjects.Capacity; j++)
+		{
+			using (var context = new Project_5Context())
+			{
+				var requirements = from a in context.iaj_requirements
+							where a.year == year
+							where a.subject == subjects[j]
+							where a.type == subjectTypes[j]
+							select a.course_id;
+				foreach (string requirement in requirements)
+				{
+					varlist.Add(requirement);
+					i += 1;
+				}
+			}
+		}
+		return varlist;
+	}
+
+	public ArrayList requirementCategories(int year, ArrayList subjects, ArrayList subjectTypes)
+	{
+
+		int i = 0;
+		var varlist = new ArrayList();
+		for (int j = 0; j < subjects.Capacity; j++)
+		{
+			using (var context = new Project_5Context())
+			{
+				var categories = from a in context.iaj_requirements
+								   where a.year == year
+								   where a.subject == subjects[j]
+								   where a.type == subjectTypes[j]
+								   select a.category;
+				foreach (string category in categories)
+				{
+					varlist.Add(category);
+					i += 1;
+				}
+			}
+		}
+		return varlist;
 	}
 }
