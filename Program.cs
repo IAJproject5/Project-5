@@ -41,5 +41,20 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 app.Run();
+void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+{
+	if (env.IsDevelopment())
+	{
+		app.UseDeveloperExceptionPage();
+	}
 
+	app.UseRouting();
+
+	app.UseEndpoints(endpoints =>
+	{
+		endpoints.MapControllerRoute(
+			name: "default",
+			pattern: "{controller=Home}/{action=Index}/{id?}");
+	});
+}
 public interface IConfiguration { }

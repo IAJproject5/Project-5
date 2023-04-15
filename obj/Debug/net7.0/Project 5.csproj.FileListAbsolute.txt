@@ -286,3 +286,4 @@ C:\Users\1969a\OneDrive\Documents\GitHub\Project-5\obj\Debug\net7.0\refint\Proje
 C:\Users\1969a\OneDrive\Documents\GitHub\Project-5\obj\Debug\net7.0\Project 5.pdb
 C:\Users\1969a\OneDrive\Documents\GitHub\Project-5\obj\Debug\net7.0\Project 5.genruntimeconfig.cache
 C:\Users\1969a\OneDrive\Documents\GitHub\Project-5\obj\Debug\net7.0\ref\Project 5.dll
+C:\Users\1969a\OneDrive\Documents\GitHub\Project-5\obj\Debug\net7.0\Project 5.csproj.ResolveComReference.cache

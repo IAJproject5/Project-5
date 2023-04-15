@@ -6,6 +6,7 @@
 	@using Project_5.Project5.Models;
 	@using System.Collections;
 	@using System.Linq;
+	@using System.Net.Http;
 	@inject SignInManager<Project_5User> SignInManager
 
 	@inject UserManager<Project_5User> UserManager
@@ -39,7 +40,33 @@
 		var u = @UserManager.GetUserId(User);
 
 		plans = Q.planIds(u);
-		string defaultID = (string)plans[0];
+		
+		var Q = new GetQuery();
+		var u = @UserManager.GetUserId(User);
+		plans = Q.planNames(u);
+		HttpClient client = new HttpClient();
+		//var responseString = await client.GetStringAsync("https://localhost:7019/");
+		string choice;
+		try
+		{
+			choice = @Context.Request.Form["planSelect"];
+		}
+		catch (Exception ex)
+		{
+			choice = null;
+		}
+		if (!String.IsNullOrEmpty(choice)){
+			thePlan = choice;
+		} else
+		{
+			thePlan = Q.defaultPlan(u);
+		}
+			/*if (responseString != null)
+		{
+			thePlan = responseString;
+		}*/
+    
+    /*string defaultID = (string)plans[0];
 
 		if(defaultID != null)
 		{
@@ -53,51 +80,77 @@
 			planCourseYears = Q.planCourseYears(defaultID);
 			requirements = Q.requirements(catalogYear, subjects, subjectTypes);
 			requirementCategories = Q.requirementCategories(catalogYear, subjects, subjectTypes);
-		}
+		}*/
 	}
-		<div class="grid-container">
-			<div class="grid-item" id="ul-container">
-				<div class="section-header">
-					<h2>
-						<!-- this needs to be centered-->
-						Requirements
-					</h2>
+	<div class="grid-container">
+		<div class="grid-item" id="ul-container">
+			<div class="section-header">
+				<h2>
+					<!-- this needs to be centered-->
+					Requirements
+				</h2>
+			</div>
+			<div id="accordion">
+				<p>Core Classes</p>
+				<div class="core">
+					<p>Time to deliver some pizza</p>
 				</div>
-				<div id="accordion">
-					<p>Core Classes</p>
-					<div class="core">
-						<p>Time to deliver some pizza</p>
-					</div>
-					<p>Track</p>
-					<div class="track">
-						<p>Choo Choo<br>I SAID CHOO CHOO</p>
-					</div>
-					<p>Required Cognates</p>
-					<div class="cognates">
-						<p>brain moment</p>
-					</div>
-					<p>Gen Eds</p>
-					<div class="geneds">
-						<p>The general shibang</p>
-					</div>
+				<p>Track</p>
+				<div class="track">
+					<p>Choo Choo<br>I SAID CHOO CHOO</p>
+				</div>
+				<p>Required Cognates</p>
+				<div class="cognates">
+					<p>brain moment</p>
+				</div>
+				<p>Gen Eds</p>
+				<div class="geneds">
+					<p>The general shibang</p>
 				</div>
 			</div>
-			<div class="grid-item" id="ur-container">
-				<div class="section-header" id="schedule-header">
-					<h2>Academic Plan: My Plan</h2>
-				</div>
-				<div class="schedule-container">
-					No years loaded.
-				</div>
-				<div class="schedule-ui">
-					<button>Open Notes</button><button>Delete Year</button><button>Add Year</button>
-					<FORM method='post' action='project4.php'>
-						<label for='planSelect'>Plan</label>
-						<select name='planSelect' id='planSelect' class='planSelect' onchange='this.form.submit()'>
-							<option value=''></option>
-							
-							<option value="">
-							</option>
+		</div>
+		<div class="grid-item" id="ur-container">
+			<div class="section-header" id="schedule-header">
+				<h2>Academic Plan: @thePlan</h2>
+			</div>
+			<div class="schedule-container">
+				No years loaded.
+			</div>
+			<div class="schedule-ui">
+				<button>Open Notes</button><button>Delete Year</button><button>Add Year</button>
+				<FORM method='post' action='?'>
+					<label for='planSelect'>Plan</label>
+					<select name='planSelect' id='planSelect' class='planSelect' onchange='this.form.submit()'>
+						<option value=""></option>
+						@{
+							@using System.Web
+							@using System.IO
+							//Project_5Context Context = new Project_5Context();
+							/*
+							System.Web.HttpContext newContext = new System.Web.HttpContext(
+							new System.Web.HttpRequest("", "http://example.com", ""),
+							new System.Web.HttpResponse(new System.IO.StringWriter())
+							);
+							*/
+
+							//Microsoft.AspNetCore.Http.HttpContext.set();
+							foreach (string plan in plans) {
+								//HttpContext.Current.Response.Write("<option value='");
+								//System.Web.HttpContext.Current.Response.Write(p);
+								//Microsoft.AspNetCore.Http.HttpContext.Current.Response.Write("'>");
+								//HttpResponse.Write(p);
+								//<%> Response.Write(p); </%>
+								//HttpContext.Current.Response.Write(p);
+								//Response.Write(p);
+								//Current.Response.Write(p);
+								//newContext.Response.Write("</option>");
+								WriteLiteral("<option value='");
+								WriteLiteral(plan);
+								WriteLiteral("'>");
+								WriteLiteral(plan);
+								WriteLiteral("</option>");
+							}
+						}
 						</select>
 					</FORM>
 				</div>
