@@ -11,7 +11,9 @@
 @inject SignInManager<Project_5User> SignInManager
 
 @inject UserManager<Project_5User> UserManager
-@{
+
+@if (SignInManager.IsSignedIn(User))
+{
     var plans = new ArrayList();
     var Q = new GetQuery();
     var u = @UserManager.GetUserId(User);
@@ -51,9 +53,7 @@
         i += 1;
     }
     var catalog = Q.catalogYear(pID);
-}
-@if (SignInManager.IsSignedIn(User))
-{
+
     <span class="header-column">
         <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
             <button id="logout" type="submit" class="nav-link btn btn-link text-dark"><strong>Logout</strong></button>
