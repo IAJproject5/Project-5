@@ -58,7 +58,21 @@ public class GetQuery
 			return "";
 		}
 	}
-	public string defaultPlan(string uID)
+    public string planID(string pName)
+    {
+        using (var context = new Project_5Context())
+        {
+            var name = from a in context.iaj_plans
+                       where a.plan_name == pName
+                       select a.plan_id;
+            foreach (string var in name)
+            {
+                return var;
+            }
+            return "";
+        }
+    }
+    public string defaultPlan(string uID)
 	{
 		using (var context = new Project_5Context())
 		{

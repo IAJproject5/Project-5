@@ -16,20 +16,31 @@
     var Q = new GetQuery();
     var u = @UserManager.GetUserId(User);
     plans = Q.planIds(u);
-    var thePlan = 0;
-    if (plans.Count > 0)
+    string choice;
+    string thePlan = "";
+    try
     {
-        foreach (string a in plans){
-            thePlan = Int32.Parse(a);
-            break;
-        }
+        choice = @Context.Request.Form["planSelect"];
     }
+    catch (Exception ex)
+    {
+        choice = null;
+    }
+    if (!String.IsNullOrEmpty(choice))
+    {
+        thePlan = choice;
+    }
+    else
+    {
+        thePlan = Q.defaultPlan(u);
+    }
+    string pID = Q.planID(thePlan);
     string majors = "";
     string minors = "";
     int i = 0;
     var Types = new ArrayList();
-    Types = Q.subjectTypes(thePlan);
-    foreach (string subject in Q.subjects(thePlan))
+    Types = Q.subjectTypes(Int32.Parse(pID));
+    foreach (string subject in Q.subjects(Int32.Parse(pID)))
     {
         if ((string)Types[i]=="Major")
         {
@@ -39,7 +50,7 @@
         }
         i += 1;
     }
-    var catalog = Q.catalogYear(thePlan.ToString());
+    var catalog = Q.catalogYear(pID);
 }
 @if (SignInManager.IsSignedIn(User))
 {
