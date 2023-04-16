@@ -237,6 +237,7 @@ public class GetQuery
 		}
 		return varlist;
 	}
+	//THE FOLLOWING FUNCTIONS NEED TO BE TESTED
 	public void newUserDefaultPlan(string uID)
 	{
 		using (var context = new Project_5Context())
