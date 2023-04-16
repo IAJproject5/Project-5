@@ -61,22 +61,7 @@
 			thePlan = Q.defaultPlan(u);
 		}
 
-		string defaultID = planIDs[plans.IndexOf(thePlan)].ToString();
-
-		if(defaultID != null)
-		{
-			string planName = Q.planName(defaultID);
-			int catalogYear = Q.catalogYear(defaultID);
-			subjects = Q.subjects(int.Parse(defaultID));
-			subjectTypes = Q.subjectTypes(int.Parse(defaultID));
-
-			planCourses = Q.planCourses(defaultID);
-			planCourseTerms = Q.planCourseTerms(defaultID);
-			planCourseYears = Q.planCourseYears(defaultID);
-			requirements = Q.requirements(catalogYear, subjects, subjectTypes);
-			requirementCategories = Q.requirementCategories(catalogYear, subjects, subjectTypes);
-			Console.Write(planName + " -- " + planCourses[0]);
-		}
+		
 	}
 	<div class="grid-container">
 		<div class="grid-item" id="ul-container">
@@ -149,6 +134,7 @@
 						}
 						</select>
 					</FORM>
+
 				</div>
 			</div>
 			<div class="grid-item" id="ll-container">

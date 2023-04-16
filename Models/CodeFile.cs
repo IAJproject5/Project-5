@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging.Signing;
+using NuGet.Versioning;
 using Project_5.Project5.Models;
 using System.Collections;
 using System.Linq;
@@ -238,5 +239,49 @@ public class GetQuery
 			}
 		}
 		return varlist;
+	}
+	public void newUserDefaultPlan(string uID)
+	{
+		using (var context = new Project_5Context())
+		{
+			var name = new iaj_plan { user_id = uID, plan_name = "My Plan", catalog = 2023, default_plan = "true"  };
+			context.iaj_plans.Add(name);
+			context.SaveChanges();
+		}
+	}
+	public void createNewPlan(string planID, string userID, string planName, int planYear)
+	{
+		using (var context = new Project_5Context())
+		{
+			var add = new iaj_plan { user_id = userID, plan_name = planName, catalog = planYear, default_plan = "false" };
+			context.iaj_plans.Add(add);
+			context.SaveChanges();
+		}
+	}
+	public void deletePlan(string planID)
+	{
+		using (var context = new Project_5Context())
+		{
+			var remove = context.iaj_plans.Where(d =>d.plan_id == planID).First();
+			context.iaj_plans.Remove(remove);
+			context.SaveChanges();
+		}
+	}
+	public void addSubjectToPlan(int planID, string subjectID, string type) {
+		using (var context = new Project_5Context())
+		{
+			var add = new iaj_plan_subject { plan_id = planID, subject = subjectID, type = type};
+			context.iaj_plan_subjects.Add(add);
+			context.SaveChanges();
+		}
+	}
+	public void addCourse(string planID, string courseID, int year, string term)
+	{
+		using (var context = new Project_5Context())
+		{
+			var add = new iaj_plan_course { plan_id = planID, course_id = courseID, year = year, term = term };
+			context.iaj_plan_courses.Add(add);
+			context.SaveChanges();
+		}
 	}
 }
