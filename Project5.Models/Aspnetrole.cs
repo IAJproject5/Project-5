@@ -13,7 +13,7 @@ public partial class aspnetrole
 
     public string? ConcurrencyStamp { get; set; }
 
-    public virtual ICollection<aspnetroleclaim> aspnetroleclaims { get; } = new List<aspnetroleclaim>();
+    public virtual ICollection<aspnetroleclaim> aspnetroleclaims { get; set; } = new List<aspnetroleclaim>();
 
-    public virtual ICollection<aspnetuser> Users { get; } = new List<aspnetuser>();
+    public virtual ICollection<aspnetuser> Users { get; set; } = new List<aspnetuser>();
 }

@@ -36,15 +36,15 @@
     {
         thePlan = Q.defaultPlan(u);
     }
-    string pID = Q.planID(thePlan);
+    int pID = Q.planID(thePlan);
     string majors = "";
     string minors = "";
     int i = 0;
     var Types = new ArrayList();
-    Types = Q.subjectTypes(Int32.Parse(pID));
-    foreach (string subject in Q.subjects(Int32.Parse(pID)))
+    Types = Q.subjectTypes(pID);
+    foreach (string subject in Q.subjects(pID))
     {
-        if ((string)Types[i]=="Major")
+        if (Types[i].ToString()=="Major")
         {
             majors+= subject + ", ";
         } else {
@@ -53,7 +53,6 @@
         i += 1;
     }
     var catalog = Q.catalogYear(pID);
-
     <span class="header-column">
         <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
             <button id="logout" type="submit" class="nav-link btn btn-link text-dark"><strong>Logout</strong></button>

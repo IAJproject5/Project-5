@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Project_5.Project5.Models;
+namespace Project_5.Models;
 
-public partial class aspnetuser
+public partial class Aspnetuser
 {
     public string Id { get; set; } = null!;
 
@@ -35,11 +35,11 @@ public partial class aspnetuser
 
     public int AccessFailedCount { get; set; }
 
-    public virtual ICollection<aspnetuserclaim> aspnetuserclaims { get; set; } = new List<aspnetuserclaim>();
+    public virtual ICollection<Aspnetuserclaim> Aspnetuserclaims { get; set; } = new List<Aspnetuserclaim>();
 
-    public virtual ICollection<aspnetuserlogin> aspnetuserlogins { get; set; } = new List<aspnetuserlogin>();
+    public virtual ICollection<Aspnetuserlogin> Aspnetuserlogins { get; set; } = new List<Aspnetuserlogin>();
 
-    public virtual ICollection<aspnetusertoken> aspnetusertokens { get; set; } = new List<aspnetusertoken>();
+    public virtual ICollection<Aspnetusertoken> Aspnetusertokens { get; set; } = new List<Aspnetusertoken>();
 
-    public virtual ICollection<aspnetrole> Roles { get; set; } = new List<aspnetrole>();
+    public virtual ICollection<Aspnetrole> Roles { get; set; } = new List<Aspnetrole>();
 }

@@ -1,9 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using NuGet.Packaging.Signing;
-using NuGet.Versioning;
+﻿using System.Collections;
+using Microsoft.EntityFrameworkCore;
 using Project_5.Project5.Models;
-using System.Collections;
-using System.Linq;
 public class GetQuery
 {
 	protected void IConfiguration(DbContextOptionsBuilder optionsBuilder)
@@ -15,11 +12,11 @@ public class GetQuery
 		using (var context = new Project_5Context())
 		{
 			var ids = from a in context.iaj_plans
-										where a.user_id == uID
-										select a.plan_id;
+					  where a.user_id == uID
+					  select a.plan_id;
 			int i = 0;
 			var varlist = new ArrayList();
-			foreach (string var in ids)
+			foreach (int var in ids)
 			{
 				varlist.Add(var);
 				i += 1;
@@ -32,8 +29,8 @@ public class GetQuery
 		using (var context = new Project_5Context())
 		{
 			var names = from a in context.iaj_plans
-					  where a.user_id == uID
-					  select a.plan_name;
+						where a.user_id == uID
+						select a.plan_name;
 			int i = 0;
 			var varlist = new ArrayList();
 			foreach (string var in names)
@@ -45,13 +42,13 @@ public class GetQuery
 		}
 	}
 	//May need to be changed to only return 1.
-	public string planName(string pID)
+	public string planName(int pID)
 	{
 		using (var context = new Project_5Context())
 		{
 			var name = from a in context.iaj_plans
 					   where a.plan_id == pID
-					  select a.plan_name;
+					   select a.plan_name;
 			foreach (string var in name)
 			{
 				return var;
@@ -59,27 +56,27 @@ public class GetQuery
 			return "";
 		}
 	}
-    public string planID(string pName)
-    {
-        using (var context = new Project_5Context())
-        {
-            var name = from a in context.iaj_plans
-                       where a.plan_name == pName
-                       select a.plan_id;
-            foreach (string var in name)
-            {
-                return var;
-            }
-            return "";
-        }
-    }
-    public string defaultPlan(string uID)
+	public int planID(string pName)
 	{
 		using (var context = new Project_5Context())
 		{
 			var name = from a in context.iaj_plans
-					  where(a.user_id == uID && a.default_plan == "true")
-					  select a.plan_name;
+					   where a.plan_name == pName
+					   select a.plan_id;
+			foreach (int var in name)
+			{
+				return var;
+			}
+			return 0;
+		}
+	}
+	public string defaultPlan(string uID)
+	{
+		using (var context = new Project_5Context())
+		{
+			var name = from a in context.iaj_plans
+					   where (a.user_id == uID && a.default_plan == "true")
+					   select a.plan_name;
 			int i = 0;
 			var varlist = new ArrayList();
 			foreach (string var in name)
@@ -89,13 +86,13 @@ public class GetQuery
 			return "";
 		}
 	}
-	public int catalogYear(string pID)
+	public int catalogYear(int pID)
 	{
 		using (var context = new Project_5Context())
 		{
-			var years = from a in context.iaj_plan_courses
-					   where a.plan_id == pID
-					   select a.year;
+			var years = from a in context.iaj_plans
+						where a.plan_id == pID
+						select a.catalog;
 			foreach (int year in years)
 			{
 				return year;
@@ -108,8 +105,8 @@ public class GetQuery
 		using (var context = new Project_5Context())
 		{
 			var subjects = from a in context.iaj_plan_subjects
-					  where a.plan_id == pID
-					  select a.subject;
+						   where a.plan_id == pID
+						   select a.subject;
 			int i = 0;
 			var varlist = new ArrayList();
 			foreach (string subject in subjects)
@@ -126,8 +123,8 @@ public class GetQuery
 		using (var context = new Project_5Context())
 		{
 			var types = from a in context.iaj_plan_subjects
-					  where a.plan_id == pID
-					  select a.type;
+						where a.plan_id == pID
+						select a.type;
 			int i = 0;
 			var varlist = new ArrayList();
 			foreach (string type in types)
@@ -139,13 +136,13 @@ public class GetQuery
 		}
 	}
 
-	public ArrayList planCourses(string pID)
+	public ArrayList planCourses(int pID)
 	{
 		using (var context = new Project_5Context())
 		{
 			var courses = from a in context.iaj_plan_courses
-					  where a.plan_id == pID
-					  select a.course_id;
+						  where a.plan_id == pID
+						  select a.course_id;
 			int i = 0;
 			var varlist = new ArrayList();
 			foreach (string course in courses)
@@ -157,13 +154,13 @@ public class GetQuery
 		}
 	}
 
-	public ArrayList planCourseTerms(string pID)
+	public ArrayList planCourseTerms(int pID)
 	{
 		using (var context = new Project_5Context())
 		{
 			var terms = from a in context.iaj_plan_courses
-						  where a.plan_id == pID
-						  select a.term;
+						where a.plan_id == pID
+						select a.term;
 			int i = 0;
 			var varlist = new ArrayList();
 			foreach (string term in terms)
@@ -175,13 +172,13 @@ public class GetQuery
 		}
 	}
 
-	public ArrayList planCourseYears(string pID)
+	public ArrayList planCourseYears(int pID)
 	{
 		using (var context = new Project_5Context())
 		{
 			var years = from a in context.iaj_plan_courses
-						  where a.plan_id == pID
-						  select a.year;
+						where a.plan_id == pID
+						select a.year;
 			int i = 0;
 			var varlist = new ArrayList();
 			foreach (int year in years)
@@ -203,10 +200,10 @@ public class GetQuery
 			using (var context = new Project_5Context())
 			{
 				var requirements = from a in context.iaj_requirements
-							where a.year == year
-							where a.subject == subjects[j]
-							where a.type == subjectTypes[j]
-							select a.course_id;
+								   where a.year == year
+								   where a.subject == subjects[j]
+								   where a.type == subjectTypes[j]
+								   select a.course_id;
 				foreach (string requirement in requirements)
 				{
 					varlist.Add(requirement);
@@ -227,10 +224,10 @@ public class GetQuery
 			using (var context = new Project_5Context())
 			{
 				var categories = from a in context.iaj_requirements
-								   where a.year == year
-								   where a.subject == subjects[j]
-								   where a.type == subjectTypes[j]
-								   select a.category;
+								 where a.year == year
+								 where a.subject == subjects[j]
+								 where a.type == subjectTypes[j]
+								 select a.category;
 				foreach (string category in categories)
 				{
 					varlist.Add(category);
@@ -244,7 +241,7 @@ public class GetQuery
 	{
 		using (var context = new Project_5Context())
 		{
-			var name = new iaj_plan { user_id = uID, plan_name = "My Plan", catalog = 2023, default_plan = "true"  };
+			var name = new iaj_plan { user_id = uID, plan_name = "My Plan", catalog = 2023, default_plan = "true" };
 			context.iaj_plans.Add(name);
 			context.SaveChanges();
 		}
@@ -258,24 +255,25 @@ public class GetQuery
 			context.SaveChanges();
 		}
 	}
-	public void deletePlan(string planID)
+	public void deletePlan(int planID)
 	{
 		using (var context = new Project_5Context())
 		{
-			var remove = context.iaj_plans.Where(d =>d.plan_id == planID).First();
+			var remove = context.iaj_plans.Where(d => d.plan_id == planID).First();
 			context.iaj_plans.Remove(remove);
 			context.SaveChanges();
 		}
 	}
-	public void addSubjectToPlan(int planID, string subjectID, string type) {
+	public void addSubjectToPlan(int planID, string subjectID, string type)
+	{
 		using (var context = new Project_5Context())
 		{
-			var add = new iaj_plan_subject { plan_id = planID, subject = subjectID, type = type};
+			var add = new iaj_plan_subject { plan_id = planID, subject = subjectID, type = type };
 			context.iaj_plan_subjects.Add(add);
 			context.SaveChanges();
 		}
 	}
-	public void addCourse(string planID, string courseID, int year, string term)
+	public void addCourse(int planID, string courseID, int year, string term)
 	{
 		using (var context = new Project_5Context())
 		{
