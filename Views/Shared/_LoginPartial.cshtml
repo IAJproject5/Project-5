@@ -42,7 +42,7 @@
     int i = 0;
     var Types = new ArrayList();
     Types = Q.subjectTypes(pID);
-    foreach (string subject in Q.subjects(pID))
+    foreach (string subject in Q.mySubjects(pID))
     {
         if (Types[i].ToString()=="Major")
         {

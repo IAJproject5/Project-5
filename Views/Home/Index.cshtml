@@ -41,26 +41,76 @@
 		var Q = new GetQuery();
 		var u = @UserManager.GetUserId(User);
 
-		plans = Q.planNames(u);
-		planIDs = Q.planIds(u);
 		HttpClient client = new HttpClient();
 		//var responseString = await client.GetStringAsync("https://localhost:7019/");
-		string choice;
 		try
 		{
-			choice = @Context.Request.Form["planSelect"];
+			thePlan = @Context.Request.Form["planSelect"];
 		}
 		catch (Exception ex)
 		{
-			choice = null;
-		}
-		if (!String.IsNullOrEmpty(choice)){
-			thePlan = choice;
-		} else
-		{
 			thePlan = Q.defaultPlan(u);
 		}
-
+		string newPlan;
+		try
+		{
+			newPlan = @Context.Request.Form["NewPlan"];
+			int year = 2023;
+			if ((newPlan != null)&&(newPlan != ""))
+			{
+				Q.createNewPlan(u, newPlan, year);
+			}
+		}
+		catch (Exception ex)
+		{
+			newPlan = null;
+		}
+		/*string addSubject;
+		try
+		{
+			addSubject = @Context.Request.Form["subjectSelect"];
+			int year = 2023;
+			if ((addSubject != null) && (addSubject != "")){
+				string[] arr = addSubject.Split(' ');
+				string subject = "";
+				string type = "";
+				foreach (string word in arr)
+				{
+					if (subject == "")
+					{
+						subject = word;
+					} else
+					{
+						type = word;
+					}
+				}
+				if ((type != null) && (type != ""))
+				{
+					Q.addSubjectToPlan(Q.planID(thePlan), subject, type);
+				}
+			}
+		}
+		catch (Exception ex)
+		{
+			addSubject = null;
+		}*/
+		string deleteP;
+		try
+		{
+			deleteP = @Context.Request.Form["Delete Plan"];
+			int year = 2023;
+			if ((deleteP != null) && (deleteP != ""))
+			{
+				Q.deletePlan(Q.planID(deleteP));
+			}
+			
+		}
+		catch (Exception ex)
+		{
+			deleteP = null;
+		}
+		plans = Q.planNames(u);
+		planIDs = Q.planIds(u);
 		
 	}
 	<div class="grid-container">
@@ -102,29 +152,9 @@
 				<FORM method='post' action='?'>
 					<label for='planSelect'>Plan</label>
 					<select name='planSelect' id='planSelect' class='planSelect' onchange='this.form.submit()'>
-						<option value=""></option>
+						<option value=@thePlan>@thePlan</option>
 						@{
-							@using System.Web
-							@using System.IO
-							//Project_5Context Context = new Project_5Context();
-							/*
-							System.Web.HttpContext newContext = new System.Web.HttpContext(
-							new System.Web.HttpRequest("", "http://example.com", ""),
-							new System.Web.HttpResponse(new System.IO.StringWriter())
-							);
-							*/
-
-							//Microsoft.AspNetCore.Http.HttpContext.set();
 							foreach (string plan in plans) {
-								//HttpContext.Current.Response.Write("<option value='");
-								//System.Web.HttpContext.Current.Response.Write(p);
-								//Microsoft.AspNetCore.Http.HttpContext.Current.Response.Write("'>");
-								//HttpResponse.Write(p);
-								//<%> Response.Write(p); </%>
-								//HttpContext.Current.Response.Write(p);
-								//Response.Write(p);
-								//Current.Response.Write(p);
-								//newContext.Response.Write("</option>");
 								WriteLiteral("<option value='");
 								WriteLiteral(plan);
 								WriteLiteral("'>");
@@ -133,8 +163,15 @@
 							}
 						}
 						</select>
-					</FORM>
-
+				</FORM>
+					<FORM method='post' action='?'>
+						<input type="text" id="NewPlan" name="NewPlan" />
+						<input type="submit" value="New Plan" />
+				</FORM>
+				<FORM method='post' action='?'>
+					<input type="text" id="Delete Plan" name="Delete Plan" />
+					<input type="submit" value="Delete Plan" />
+				</FORM>
 				</div>
 			</div>
 			<div class="grid-item" id="ll-container">

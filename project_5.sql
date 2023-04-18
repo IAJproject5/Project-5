@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 11, 2023 at 03:17 AM
+-- Generation Time: Apr 18, 2023 at 08:24 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.0.25
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `project 5`
 --
-CREATE DATABASE IF NOT EXISTS `project 5` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `project 5`;
 
 -- --------------------------------------------------------
 
@@ -142,6 +140,13 @@ CREATE TABLE `iaj_catalog` (
   `year` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `iaj_catalog`
+--
+
+INSERT INTO `iaj_catalog` (`year`) VALUES
+(2023);
+
 -- --------------------------------------------------------
 
 --
@@ -167,8 +172,15 @@ INSERT INTO `iaj_course` (`course_id`, `name`, `description`, `credits`, `prereq
 ('BTGE-101', 'Bible Class', 'The Bible. What is it? Come to class and find out.', 3, NULL),
 ('BTGE-102', 'Bible 2', 'The sequel', 6, 'NULL'),
 ('BTGE-103', 'Bible 3', 'The New New Testament', 5, 'NULL'),
+('CS-1000', 'Programming Computers', 'The fundamentals', 3, 'CS-555'),
 ('CS-101', 'Basics of Programming', 'Learn how to C++, Java, Python, all just a little bit, but not too much.', 3, NULL),
+('CS-1052', 'Video Games', 'To the good stuff', 3, 'CS-402'),
+('CS-1200', 'Programming Servers', 'Cooler stuff', 3, 'CS-1000'),
+('CS-2092', 'Good Video Games', 'Advanced Gaming', 3, 'CS-1052'),
+('CS-300', 'Board Games', 'Walk before you can run', 3, NULL),
+('CS-3000', 'Programming The Internet', 'The Future', 3, 'CS-1200'),
 ('CS-308', 'Intermediate Programming', 'More of everything.', 3, 'CS-101'),
+('CS-402', 'Atari Games', 'Historical introduction', 3, 'CS-300'),
 ('CS-555', 'Advanced Programming', 'Now with pointers!', 6, 'CS-308');
 
 -- --------------------------------------------------------
@@ -178,8 +190,8 @@ INSERT INTO `iaj_course` (`course_id`, `name`, `description`, `credits`, `prereq
 --
 
 CREATE TABLE `iaj_plan` (
-  `plan_id` varchar(20) NOT NULL,
-  `user_id` int(11) DEFAULT NULL,
+  `plan_id` int(11) NOT NULL,
+  `user_id` varchar(255) DEFAULT NULL,
   `plan_name` varchar(20) DEFAULT NULL,
   `catalog` decimal(4,0) DEFAULT NULL,
   `default_plan` varchar(20) DEFAULT NULL CHECK (`default_plan` in ('true','false'))
@@ -190,8 +202,13 @@ CREATE TABLE `iaj_plan` (
 --
 
 INSERT INTO `iaj_plan` (`plan_id`, `user_id`, `plan_name`, `catalog`, `default_plan`) VALUES
-('54321', 12, 'My Plan', '2023', 'true'),
-('54555', 12, 'My 2nd Plan', '2023', 'false');
+(1, '7703870f-6c74-4b83-8f3c-a0a7df64429d', 'Hammer Strategy', '2023', 'false'),
+(2, '7703870f-6c74-4b83-8f3c-a0a7df64429d', 'Building', '2023', 'false'),
+(3, '2a2c4615-f722-4ca4-a9f9-c2735880e51d', 'Puffing', '2023', 'false'),
+(4, '2a2c4615-f722-4ca4-a9f9-c2735880e51d', 'Secret Hoard', '2023', 'false'),
+(54321, '012c3b14-429f-4c35-9808-70746c7aa23e', 'My Plan', '2023', 'true'),
+(54555, '012c3b14-429f-4c35-9808-70746c7aa23e', 'My 2nd Plan', '2023', 'false'),
+(54613, '012c3b14-429f-4c35-9808-70746c7aa23e', 'temp', '2023', 'false');
 
 -- --------------------------------------------------------
 
@@ -200,7 +217,7 @@ INSERT INTO `iaj_plan` (`plan_id`, `user_id`, `plan_name`, `catalog`, `default_p
 --
 
 CREATE TABLE `iaj_plan_courses` (
-  `plan_id` varchar(20) DEFAULT NULL,
+  `plan_id` int(11) DEFAULT NULL,
   `course_id` varchar(20) DEFAULT NULL,
   `year` int(11) DEFAULT NULL,
   `term` varchar(10) DEFAULT NULL
@@ -211,14 +228,30 @@ CREATE TABLE `iaj_plan_courses` (
 --
 
 INSERT INTO `iaj_plan_courses` (`plan_id`, `course_id`, `year`, `term`) VALUES
-('54321', 'BIO-101', 2023, 'fall'),
-('54321', 'BTGE-101', 2024, 'spring'),
-('54321', 'BIO-3011', 2024, 'fall'),
-('54321', 'BIO-9523', 2025, 'spring'),
-('54555', 'CS-101', 2023, 'fall'),
-('54555', 'CS-308', 2024, 'spring'),
-('54555', 'CS-555', 2024, 'fall'),
-('54555', 'BIO-101', 2025, 'spring');
+(54321, 'BIO-101', 2023, 'fall'),
+(54321, 'BTGE-101', 2024, 'spring'),
+(54321, 'BIO-3011', 2024, 'fall'),
+(54321, 'BIO-9523', 2025, 'spring'),
+(54555, 'CS-101', 2023, 'fall'),
+(54555, 'CS-308', 2024, 'spring'),
+(54555, 'CS-555', 2024, 'fall'),
+(54555, 'BIO-101', 2025, 'spring'),
+(54321, 'BIO-101', 2023, 'fall'),
+(54321, 'BTGE-101', 2024, 'spring'),
+(54321, 'BIO-3011', 2024, 'fall'),
+(54321, 'BIO-9523', 2025, 'spring'),
+(54555, 'CS-101', 2023, 'fall'),
+(54555, 'CS-308', 2024, 'spring'),
+(54555, 'CS-555', 2024, 'fall'),
+(54555, 'BIO-101', 2025, 'spring'),
+(54321, 'BIO-101', 2023, 'fall'),
+(54321, 'BTGE-101', 2024, 'spring'),
+(54321, 'BIO-3011', 2024, 'fall'),
+(54321, 'BIO-9523', 2025, 'spring'),
+(54555, 'CS-101', 2023, 'fall'),
+(54555, 'CS-308', 2024, 'spring'),
+(54555, 'CS-555', 2024, 'fall'),
+(54555, 'BIO-101', 2025, 'spring');
 
 -- --------------------------------------------------------
 
@@ -227,9 +260,9 @@ INSERT INTO `iaj_plan_courses` (`plan_id`, `course_id`, `year`, `term`) VALUES
 --
 
 CREATE TABLE `iaj_plan_subjects` (
-  `plan_id` int(11) DEFAULT NULL,
-  `subject` varchar(50) DEFAULT NULL,
-  `type` varchar(10) DEFAULT NULL
+  `plan_id` int(11) NOT NULL,
+  `subject` varchar(50) NOT NULL,
+  `type` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -237,8 +270,19 @@ CREATE TABLE `iaj_plan_subjects` (
 --
 
 INSERT INTO `iaj_plan_subjects` (`plan_id`, `subject`, `type`) VALUES
-(54321, 'Computer Science', 'Major'),
+(1, 'Ethics', 'Major'),
+(1, 'Social Work', 'Major'),
+(2, 'Nursing', 'Major'),
+(2, 'Psychology', 'Minor'),
+(2, 'Social Work', 'Minor'),
+(3, 'Liberal Arts', 'Minor'),
+(3, 'Physics', 'Minor'),
+(3, 'Psychology', 'Major'),
+(4, 'Ethics', 'Minor'),
+(4, 'Physics', 'Major'),
+(4, 'Social Work', 'Minor'),
 (54321, 'Bible', 'Minor'),
+(54321, 'Computer Science', 'Major'),
 (54321, 'Math', 'Minor'),
 (54555, 'Bible', 'Major');
 
@@ -269,7 +313,34 @@ INSERT INTO `iaj_requirements` (`year`, `subject`, `type`, `category`, `course_i
 ('2023', 'Bible', 'Minor', 'GenEds', 'BTGE-101'),
 ('2023', 'Bible', 'Major', 'Core', 'BTGE-101'),
 ('2023', 'Bible', 'Major', 'Electives', 'BTGE-102'),
-('2023', 'Bible', 'Major', 'Cognates', 'BTGE-103');
+('2023', 'Bible', 'Major', 'Cognates', 'BTGE-103'),
+('2023', 'Computer Science', 'Major', 'Core', 'CS-1000'),
+('2023', 'Computer Science', 'Major', 'Core', 'CS-1200'),
+('2023', 'Computer Science', 'Major', 'Core', 'CS-3000'),
+('2023', 'Computer Science', 'Major', 'Track', 'CS-300'),
+('2023', 'Computer Science', 'Major', 'Track', 'CS-402'),
+('2023', 'Computer Science', 'Major', 'Track', 'CS-1052'),
+('2023', 'Computer Science', 'Major', 'Track', 'CS-2092'),
+('2023', 'Computer Science', 'Major', 'Core', 'CS-101'),
+('2023', 'Computer Science', 'Major', 'Track', 'CS-308'),
+('2023', 'Computer Science', 'Major', 'Electives', 'CS-555'),
+('2023', 'Biology', 'Gen-Ed', 'Electives', 'BIO-3011'),
+('2023', 'Biology', 'Gen-Ed', 'Cognates', 'BIO-9523'),
+('2023', 'Bible', 'Minor', 'GenEds', 'BTGE-101'),
+('2023', 'Bible', 'Major', 'Core', 'BTGE-101'),
+('2023', 'Bible', 'Major', 'Electives', 'BTGE-102'),
+('2023', 'Bible', 'Major', 'Cognates', 'BTGE-103'),
+('2023', 'Computer Science', 'Major', 'Core', 'CS-1000'),
+('2023', 'Computer Science', 'Major', 'Core', 'CS-1000'),
+('2023', 'Computer Science', 'Major', 'Core', 'CS-1200'),
+('2023', 'Computer Science', 'Major', 'Core', 'CS-1000'),
+('2023', 'Computer Science', 'Major', 'Core', 'CS-1200'),
+('2023', 'Computer Science', 'Major', 'Core', 'CS-3000'),
+('2023', 'Computer Science', 'Major', 'Core', 'CS-1000'),
+('2023', 'Computer Science', 'Major', 'Core', 'CS-1200'),
+('2023', 'Computer Science', 'Major', 'Core', 'CS-3000'),
+('2023', 'Computer Science', 'Major', 'Track', 'CS-300'),
+('2023', 'Computer Science', 'Major', 'Track', 'CS-402');
 
 -- --------------------------------------------------------
 
@@ -290,7 +361,21 @@ INSERT INTO `iaj_subjects` (`subject`, `type`) VALUES
 ('Bible', 'Major'),
 ('Bible', 'Minor'),
 ('Computer Science', 'Major'),
-('Math', 'Minor');
+('Computer Science', 'Minor'),
+('Electrical Engineering', 'Major'),
+('Ethics', 'Major'),
+('Ethics', 'Minor'),
+('Liberal Arts', 'Minor'),
+('Math', 'Major'),
+('Math', 'Minor'),
+('Mechanical Engineering', 'Major'),
+('Nursing', 'Major'),
+('Physics', 'Major'),
+('Physics', 'Minor'),
+('Psychology', 'Major'),
+('Psychology', 'Minor'),
+('Social Work', 'Major'),
+('Social Work', 'Minor');
 
 -- --------------------------------------------------------
 
@@ -382,6 +467,12 @@ ALTER TABLE `iaj_plan`
   ADD PRIMARY KEY (`plan_id`);
 
 --
+-- Indexes for table `iaj_plan_subjects`
+--
+ALTER TABLE `iaj_plan_subjects`
+  ADD PRIMARY KEY (`plan_id`,`subject`,`type`);
+
+--
 -- Indexes for table `iaj_subjects`
 --
 ALTER TABLE `iaj_subjects`
@@ -408,6 +499,12 @@ ALTER TABLE `aspnetroleclaims`
 --
 ALTER TABLE `aspnetuserclaims`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `iaj_plan`
+--
+ALTER TABLE `iaj_plan`
+  MODIFY `plan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54614;
 
 --
 -- Constraints for dumped tables

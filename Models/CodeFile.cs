@@ -100,7 +100,7 @@ public class GetQuery
 			return 0;
 		}
 	}
-	public ArrayList subjects(int pID)
+	public ArrayList mySubjects(int pID)
 	{
 		using (var context = new Project_5Context())
 		{
@@ -237,7 +237,32 @@ public class GetQuery
 		}
 		return varlist;
 	}
-	//THE FOLLOWING FUNCTIONS NEED TO BE TESTED
+	public ArrayList subjects()
+	{
+		using (var context = new Project_5Context())
+		{
+			var subjects = from a in context.iaj_subjects
+						   select a.subject;
+			var types = from a in context.iaj_subjects
+						select a.type;
+			int i = 0;
+			var varlist = new ArrayList();
+			var typesList = new ArrayList();
+			foreach (var type in types)
+			{
+				typesList.Add(type);
+			}
+			foreach (string subject in subjects)
+			{
+				varlist.Add(subject + " " + typesList[i]);
+				i += 1;
+			}
+
+			varlist.TrimToSize();
+			return varlist;
+		}
+	}
+	//Setters
 	public void newUserDefaultPlan(string uID)
 	{
 		using (var context = new Project_5Context())
@@ -247,7 +272,7 @@ public class GetQuery
 			context.SaveChanges();
 		}
 	}
-	public void createNewPlan(string planID, string userID, string planName, int planYear)
+	public void createNewPlan(string userID, string planName, int planYear)
 	{
 		using (var context = new Project_5Context())
 		{
@@ -265,11 +290,11 @@ public class GetQuery
 			context.SaveChanges();
 		}
 	}
-	public void addSubjectToPlan(int planID, string subjectID, string type)
+	public void addSubjectToPlan(int planID, string subject, string type)
 	{
 		using (var context = new Project_5Context())
 		{
-			var add = new iaj_plan_subject { plan_id = planID, subject = subjectID, type = type };
+			var add = new iaj_plan_subject { plan_id = planID, subject = subject, type = type };
 			context.iaj_plan_subjects.Add(add);
 			context.SaveChanges();
 		}
