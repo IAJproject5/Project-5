@@ -5,8 +5,13 @@
 @inject UserManager<Project_5User> UserManager
 
 @model IEnumerable<Project_5User>
+@using static Microsoft.AspNetCore.Identity.IdentityRole
 @{
     ViewData["Title"] = "User Management";
+}
+
+@{
+    //List<IdentityRole> userRoles = new List<IdentityRole>();
 }
 
 <h1>All Users</h1>
@@ -14,14 +19,27 @@
 <a asp-action="Create" class="btn btn-secondary">Create a User</a>
 
 <table class="table table-sm table-bordered">
-    <tr><th>ID</th><th>Name</th><th>Email</th></tr>
+    <tr><th>ID</th><th>Name</th><th>Email</th><th>Roles</th><th></th><th></th></tr>
     @foreach (Project_5User user in Model)
     {
         <tr>
             <td>@user.Id</td>
             <td>@user.UserName</td>
             <td>@user.Email</td>
-            <td></td>
+            <td>
+                <table>
+                    <tr>
+                    @{
+                        List<IdentityRole> userRoles = Project_5.Helpers.UserManagementHelper.getUserRoleList(user.Id);
+                    }
+                    @foreach (IdentityRole role in userRoles)
+                    {
+                      <td>@role.Name</td>
+                    }
+                    </tr>
+                </table>
+            </td>
+            <td><a href="@("UserManagement/" + user.Id)"><button type="button">Details</button></a></td>
         </tr>
     }
 </table>

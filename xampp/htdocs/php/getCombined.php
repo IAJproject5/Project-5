@@ -23,10 +23,10 @@ function console_log($output, $with_script_tags = true) {
     echo $js_code;
 }
 
-$DATABASE_HOST = 'james.cedarville.edu';
-$DATABASE_USER = 'cs3220_sp23';
-$DATABASE_PASS = 'E57y6Z1FwAlraEmA';
-$DATABASE_NAME = 'cs3220_sp23';
+$DATABASE_HOST = 'localhost';
+$DATABASE_USER = 'root';
+$DATABASE_PASS = '';
+$DATABASE_NAME = 'test';
 $combined = array();
 $plan = array();
 $catalog = array();
@@ -34,7 +34,10 @@ $catalog = array();
 if (!isset($_SESSION['id'])) {
 	//exit('No user provided');
 	$_SESSION['id'] = '12345';
+	$_SESSION['plan'] = '54321';
 }
+$_SESSION['id'] = '12345';
+$_SESSION['plan'] = '54321';
 
 $con = mysqli_connect($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME);
 if ( mysqli_connect_errno()) {

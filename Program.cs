@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Project_5.Areas.Identity.Data;
 using Project_5.Data;
+using Project_5.Helpers;
+
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("Project_5ContextConnection") ?? throw new InvalidOperationException("Connection string 'Project_5ContextConnection' not found.");
 
@@ -9,10 +11,12 @@ builder.Services.AddDbContext<Project_5Context>(options =>
     options.UseMySql(connectionString, new MySqlServerVersion (new Version(10,4,27))));
 
 builder.Services.AddDefaultIdentity<Project_5User>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<Project_5Context>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<UserManagementHelper>();
 
 var app = builder.Build();
 

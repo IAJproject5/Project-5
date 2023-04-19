@@ -149,7 +149,7 @@ function externalPlanHandler() {
 	if (this.status === 200) {
 		let returnPlan = new Plan("John Smith's Plan", 0, "", "John Smith", "");
 		let externalPlan = this.response.plan;
-		//console.log(externalPlan);
+		console.log(externalPlan);
 		currentCatalog = this.response.catalog;
 		let currentYear;
 		returnPlan.name = externalPlan.name;
@@ -339,13 +339,13 @@ function init() {
 
 	xhr.addEventListener("load", externalPlanHandler);
 	xhr.responseType = "json";
-	xhr.open("GET", "~/php/getCombined.php");
+	xhr.open("GET", "localhost:80/php/getCombined.php");
 	xhr.onreadystatechange = function() {
 		if(xhrReq == undefined) {
 			xhrReq = new XMLHttpRequest();
 			xhrReq.addEventListener("load", loadRequirements);
 			xhrReq.responseType = "json";
-			xhrReq.open("GET", "~/php/getRequirements.php");
+			xhrReq.open("GET", "localhost:80/php/getRequirements.php");
 			xhrReq.send();
 		}
 	}
