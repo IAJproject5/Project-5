@@ -2,6 +2,7 @@
 using Project_5.Areas.Identity.Data;
 using Project_5.Controllers;
 using Project_5.Data;
+using Project_5.Models;
 
 namespace Project_5.Helpers
 {

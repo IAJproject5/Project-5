@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace Project_5.Project5.Models;
+namespace Project_5.Models;
 
-public partial class Project_5Context : DbContext
+public partial class Project5Context : DbContext
 {
-    public Project_5Context()
+    public Project5Context()
     {
     }
 
-    public Project_5Context(DbContextOptions<Project_5Context> options)
+    public Project5Context(DbContextOptions<Project5Context> options)
         : base(options)
     {
     }
@@ -44,7 +44,8 @@ public partial class Project_5Context : DbContext
     public virtual DbSet<IajSubject> IajSubjects { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseMySql("name=ConnectionStrings:Project_5ContextConnection", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.4.27-mariadb"));
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseMySql("server=localhost;user id=root;database=\"Project 5\"", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.4.27-mariadb"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -216,7 +217,7 @@ public partial class Project_5Context : DbContext
             entity.ToTable("iaj_plan");
 
             entity.Property(e => e.PlanId)
-                .HasMaxLength(20)
+                .HasColumnType("int(11)")
                 .HasColumnName("plan_id");
             entity.Property(e => e.Catalog)
                 .HasPrecision(4)
@@ -228,7 +229,7 @@ public partial class Project_5Context : DbContext
                 .HasMaxLength(20)
                 .HasColumnName("plan_name");
             entity.Property(e => e.UserId)
-                .HasColumnType("int(11)")
+                .HasMaxLength(255)
                 .HasColumnName("user_id");
         });
 
@@ -242,7 +243,7 @@ public partial class Project_5Context : DbContext
                 .HasMaxLength(20)
                 .HasColumnName("course_id");
             entity.Property(e => e.PlanId)
-                .HasMaxLength(20)
+                .HasColumnType("int(11)")
                 .HasColumnName("plan_id");
             entity.Property(e => e.Term)
                 .HasMaxLength(10)

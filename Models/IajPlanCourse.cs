@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Project_5.Project5.Models;
+namespace Project_5.Models;
 
 public partial class IajPlanCourse
 {
-    public string? PlanId { get; set; }
+    public int PlanId { get; set; }
 
     public string? CourseId { get; set; }
 

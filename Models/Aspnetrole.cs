@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Project_5;
 
-namespace Project_5.Project5.Models;
+namespace Project_5.Models;
 
 public partial class Aspnetrole
 {
@@ -14,7 +13,7 @@ public partial class Aspnetrole
 
     public string? ConcurrencyStamp { get; set; }
 
-    public virtual ICollection<Aspnetroleclaim> Aspnetroleclaims { get; } = new List<Aspnetroleclaim>();
+    public virtual ICollection<Aspnetroleclaim> Aspnetroleclaims { get; set; } = new List<Aspnetroleclaim>();
 
-    public virtual ICollection<Aspnetuser> Users { get; } = new List<Aspnetuser>();
+    public virtual ICollection<Aspnetuser> Users { get; set; } = new List<Aspnetuser>();
 }

@@ -149,7 +149,7 @@ function externalPlanHandler() {
 	if (this.status === 200) {
 		let returnPlan = new Plan("John Smith's Plan", 0, "", "John Smith", "");
 		let externalPlan = this.response.plan;
-		console.log(externalPlan);
+		console.log(this.status);
 		currentCatalog = this.response.catalog;
 		let currentYear;
 		returnPlan.name = externalPlan.name;
@@ -448,6 +448,27 @@ function clearCars(doc) {
 	while (doc.hasChildNodes()){
 		doc.removeChild(doc.firstChild);
 	}
+}
+
+function changePlan(event) {
+	let xhr = new XMLHttpRequest();
+	let xhrReq;
+
+	xhr.addEventListener("load", externalPlanHandler);
+	xhr.responseType = "json";
+	xhr.open("GET", "plan/" + document.getElementById("planSelect").value);
+	console.log("Sent request to route!" + " localhost:7019/plan/" + document.getElementById("planSelect").value);
+	xhr.onreadystatechange = function () {
+		if (xhrReq == undefined) {
+			xhrReq = new XMLHttpRequest();
+			xhrReq.addEventListener("load", loadRequirements);
+			xhrReq.responseType = "json";
+			xhrReq.open("GET", "plan/" + document.getElementById("planSelect").value);
+			xhrReq.send();
+		}
+	}
+	xhr.send();
+	return;
 }
 
 $( function() {

@@ -1,4 +1,9 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@using Project_5.Areas.Identity.Data
+@inject UserManager<Project_5User> UserManager;
+@inject SignInManager<Project_5User> SignInManager;
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -47,17 +52,26 @@
 					<h2>Academic Plan: My Plan</h2>
 				</div>
 				<div class="schedule-container">
-					No years loaded.
+					No schedule loaded.
 				</div>
 				<div class="schedule-ui">
 					<button>Open Notes</button><button>Delete Year</button><button>Add Year</button>
-					<FORM method='post' action='project4.php'>
+					<FORM onSubmit='JavaScript:changePlan()'>
 						<label for='planSelect'>Plan</label>
-						<select name='planSelect' id='planSelect' class='planSelect' onchange='this.form.submit()'>
-							<option value=''></option>
-							
-							<option value="">
-							</option>
+						<select name='planSelect' id='planSelect' class='planSelect' onchange='changePlan()'>
+							@{
+								if (SignInManager.IsSignedIn(User)/* && Project_5.Helpers.PlanHelper.getUserPlans("afe2f275-43ed-40a1-b2ee-322b7ea34c9b") != null*/)
+								{
+									foreach (IajPlan plan in Project_5.Helpers.PlanHelper.getUserPlans("afe2f275-43ed-40a1-b2ee-322b7ea34c9b"/*UserManager.GetUserId(User)*/))
+									{
+										WriteLiteral("<option value='");
+										WriteLiteral(plan.PlanId);
+										WriteLiteral("'>");
+										WriteLiteral(plan.PlanName);
+										WriteLiteral("</option>");
+									}
+								}
+							}
 						</select>
 					</FORM>
 				</div>
