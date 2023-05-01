@@ -63,5 +63,17 @@ namespace Project_5.Helpers
 			}
 			return courses;
 		}
+
+		public static List<IajRequirement> getPlanRequirements(int planId)
+		{
+			var plan = getPlan(planId);
+			var planSubjects = context.IajPlanSubjects.Where(b => b.PlanId.Equals(planId)).ToList();
+			var requirements = new List<IajRequirement>();
+			foreach (var planSubject in planSubjects)
+			{
+				requirements = requirements.Concat(context.IajRequirements.Where(b => ( b.Subject.Equals(planSubject.Subject) && b.Year.Equals(plan.Catalog)) )).ToList();
+			}
+			return requirements;
+		}
 	}
 }

@@ -22,6 +22,7 @@ using Project_5.Areas.Identity.Data;
 
 namespace Project_5.Areas.Identity.Pages.Account
 {
+    [AllowAnonymous]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<Project_5User> _signInManager;
@@ -121,6 +122,8 @@ namespace Project_5.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
+                        IdentityResult roleresult = await _userManager.AddToRoleAsync(user, "Student");
+
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);

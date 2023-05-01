@@ -5,24 +5,9 @@ using Project_5.Models;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Text.Json;
 using System.Collections;
-
-public class PlanCombined
-{
-    public string? name;
-    public int? planID;
-    public string? student;
-    public int? catalog;
-    public List<string>? courses;
-    public string? major;
-	public List<string>? majors;
-    public int? currYear;
-    public string? currTerm;
-
-    public PlanCombined()
-    {
-
-    }
-}
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace Project_5.Controllers
 {
@@ -45,7 +30,17 @@ namespace Project_5.Controllers
         public int? year { get; set; }
         public string? term { get; set; }
     }
-    
+
+    public class CategoryCourses
+    {
+        public Dictionary<string, string> courses { get; set; }
+    }
+
+    public class Category
+    {
+        public Dictionary<string,string> courses { get; set; }
+    }
+    [Authorize]
     public class PlanController : Controller
     {
         private string getCurrentTerm()
@@ -71,12 +66,6 @@ namespace Project_5.Controllers
             context = ctx;
         }
 
-        /*[HttpGet("id")]
-        public IActionResult Index(string id)
-        {
-
-            return View();
-        }*/
 		[HttpGet("plan/{planIdInput}")]
 		public IActionResult Index(string planIdInput)
 		{
@@ -84,7 +73,16 @@ namespace Project_5.Controllers
 
             int planId = Int32.Parse(planIdInput);
             IajPlan plan = PlanHelper.getPlan(planId);
+            // Plan not found and plan not belonging to user both return an empty JSON object.
+            if (plan == null)
+            {
+                return Json(new { });
+            }
             string userId = plan.UserId;
+            if (userId != User.FindFirstValue(ClaimTypes.NameIdentifier))
+            {
+                return Json(new { });
+            }
             List<IajPlanCourse> courses = PlanHelper.getPlanCourses(planId);
             Dictionary<string, PlanCourse> planCourses = new Dictionary<string, PlanCourse>();
             foreach (var course in courses) 
@@ -136,16 +134,42 @@ namespace Project_5.Controllers
                     courses = catalogCourseArray
                 }
 			};
-            /*returnPlan.name = userId;
-		    returnPlan.planID = planId;
-		    //returnPlan.student = UserManagementHelper.getUserInfo(plan.UserId).UserName;
-		    returnPlan.catalog = (int)plan.Catalog;
-		    returnPlan.courses = courseIDs;
-		    returnPlan.major = "";
-		    returnPlan.majors = subjectNames;
-		    returnPlan.currYear = Int32.Parse(DateTime.Today.ToString("yyyy"));
-            returnPlan.currTerm = getCurrentTerm();*/
             return Json(returnPlan);
 		}
+
+		[HttpGet("plan/{planIdInput}/requirements")]
+		public IActionResult Requirements(string planIdInput)
+		{
+			int planId = Int32.Parse(planIdInput);
+			IajPlan plan = PlanHelper.getPlan(planId);
+            var requirements = PlanHelper.getPlanRequirements(planId);
+
+			Dictionary<string, Category> theseCategories = new Dictionary<string, Category>();
+            foreach (var requirement in requirements)
+            {
+                if (requirement != null)
+                {
+                    if (!theseCategories.ContainsKey(requirement.Category))
+                    {
+						theseCategories.Add(requirement.Category, new Category
+                        {
+                            courses = new Dictionary<string,string>()
+                        });
+                    }
+					theseCategories[requirement.Category].courses[requirement.CourseId] = requirement.CourseId;
+                }
+            }
+            var returnRequirements = new
+            {
+				categories = theseCategories
+			};
+			return Json(returnRequirements);
+		}
+        [HttpPut("plan/{planIdInput}")]
+        public IActionResult Update(string planIdInput)
+        {
+
+            return View();
+        }
 	}
 }

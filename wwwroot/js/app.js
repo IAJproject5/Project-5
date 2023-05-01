@@ -12,11 +12,14 @@
  *	jquery.ui.widget.js
  */
 
+//let currentPlan = new Plan("", 0, "", "", );
+
+let currentHighestYear = new Date().getFullYear() - 1;
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function Plan(name, year, major, studentName, currentSemester, courses = []) {
+function Plan(name, year, major, studentName, currentSemester, courses) {
 	this.name = name;
 	this.year = year;
 	this.major = major;
@@ -103,6 +106,9 @@ function generateScheduleHTML(plan) {
 	let outputYear;
 	for (let i = 0; i < yearsFormatted.length; i++) {
 		year = yearsFormatted[i];
+		if (year.year > currentHighestYear) {
+			currentHighestYear = year.year
+		}
 		for (let k = 0; k < year.terms.length; k++) {
 			term = year.terms[k];
 			if (term.semester === "Spring" || term.semester === "Summer") {
@@ -113,7 +119,7 @@ function generateScheduleHTML(plan) {
 			}
 			if (present == false) {
 				returnHTML +=
-					"<div class=\"schedule-year-block\"><span class=\"semester-title\">" +
+					"<div id='" + term.semester + "," + outputYear + "' ondragover='onYearDragOver(event)' ondrop='onCourseDrop(event, this)' class=\"schedule-year-block\"><span class=\"semester-title\">" +
 					term.semester + " " + outputYear +
 					"</span><span class=\"semester-hours\">Hours: " +
 					sumCreditHours(term.courses) + "</span><br><ul class=\"course-list\">";
@@ -130,8 +136,10 @@ function generateScheduleHTML(plan) {
 			}
 			for (let j = 0; j < term.courses.length; j++) {
 				course = term.courses[j];
-				returnHTML += "<li class=\"course\">" + course.id + " " + course.name +
-					"</li>";
+				if (course.id != "") {
+					returnHTML += "<li ondragstart='dragCourse(event)' draggable='true' class=\"course\" id='" + course.id + "'>" + course.id + " " + course.name +
+						"<button onclick='removeCourse(this)'>X</button></li>";
+				}
 			}
 			returnHTML += "</ul></div>";
 		}
@@ -139,15 +147,90 @@ function generateScheduleHTML(plan) {
 	return returnHTML;
 }
 
+function savePlan(event) {
+	console.log(JSON.stringify(currentPlan));
+	return;
+	xhrReq = new XMLHttpRequest();
+	xhrReq.addEventListener("load", planSaveHandler);
+	xhrReq.responseType = "";
+	xhrReq.open("PUT", "/plan/" + document.getElementById("planSelect").value);
+	xhrReq.send(JSON.stringify(currentPlan));
+}
+
+function addYear(event) {
+	currentHighestYear++;
+	currentPlan.courses.push(new Course("", "", 0, "Fall", currentHighestYear));
+	pageScheduleContainer.innerHTML = generateScheduleHTML(currentPlan);
+	pageScheduleHeader.innerHTML = generateScheduleHeader(currentPlan);
+}
+
+function removeCourse(event) {
+	var target = event;
+	var parent = target.parentElement;
+	console.log(target.innerHTML);
+	if (target.innerHTML != "X") {
+		return;
+	}
+	console.log(parent.id);
+	for (let i = 0; i < currentPlan.courses.length; i++) {
+		if (currentPlan.courses[i].id == parent.id/*ID of course with X pressed*/) {
+			currentPlan.courses.splice(i, 1);
+		}
+	}
+	pageScheduleContainer.innerHTML = generateScheduleHTML(currentPlan);
+	pageScheduleHeader.innerHTML = generateScheduleHeader(currentPlan);
+	xhrReq = new XMLHttpRequest();
+	xhrReq.addEventListener("load", loadRequirements);
+	xhrReq.responseType = "json";
+	xhrReq.open("GET", "/plan/" + document.getElementById("planSelect").value + "/requirements");
+	xhrReq.send();
+	return;
+}
+
+function onYearDragOver(event) {
+	event.preventDefault();
+}
+
+function onCourseDrop(event, caller) {
+	if (event.currentTarget.classList.contains("schedule-year-block")) {
+		console.log(event.currentTarget.id);
+		event.preventDefault();
+		console.log("Dropped " + event.dataTransfer.getData("courseInfo"));
+		let dropCourseID = event.dataTransfer.getData("courseInfo").split(",")[0];
+		for (let i = 0; i < currentPlan.courses.length; i++) {
+			if (currentPlan.courses[i].id == dropCourseID) {
+				currentPlan.courses.splice(i, 1);
+			}
+		}
+		currentPlan.courses.push(new Course(dropCourseID, currentCatalog.courses[dropCourseID].name, currentCatalog.courses[dropCourseID].credits, event.currentTarget.id.split(",")[0], event.currentTarget.id.split(",")[1]));
+		pageScheduleContainer.innerHTML = generateScheduleHTML(currentPlan);
+		pageScheduleHeader.innerHTML = generateScheduleHeader(currentPlan);
+		xhrReq = new XMLHttpRequest();
+		xhrReq.addEventListener("load", loadRequirements);
+		xhrReq.responseType = "json";
+		xhrReq.open("GET", "/plan/" + document.getElementById("planSelect").value + "/requirements");
+		xhrReq.send();
+	}
+}
+
+function dragCourse(event) {
+	let courseInfo = event.target.id.split(" ")[0];
+	event.dataTransfer.setData("courseInfo", courseInfo);
+}
+
+function dragTableCourse(event) {
+
+}
+
 function generateScheduleHeader(plan) {
 	let returnHTML = "";
-	returnHTML = "<h2>Academic Plan: " + plan.name + "</h2>";
+	returnHTML = "<h2>Academic Plan: " + plan.name + "</h2><span>" + sumCreditHours(plan.courses) + " Credit Hours</span>";
 	return returnHTML;
 }
 
 function externalPlanHandler() {
 	if (this.status === 200) {
-		let returnPlan = new Plan("John Smith's Plan", 0, "", "John Smith", "");
+		let returnPlan = new Plan("John Smith's Plan", 0, "", "John Smith", "", []);
 		let externalPlan = this.response.plan;
 		console.log(this.status);
 		currentCatalog = this.response.catalog;
@@ -158,17 +241,6 @@ function externalPlanHandler() {
 		returnPlan.currentSemester = "" + externalPlan.currTerm + " " + externalPlan.currYear;
 		returnPlan.studentName = externalPlan.student;
 		let currentCourse;
-		/*for (const courseKey in (currentCatalog.courses)) {
-				returnPlan.courses.push(new Course(
-					courseKey,
-					currentCatalog.courses[courseKey].name,
-					currentCatalog.courses[courseKey].credits,
-					//capitalizeFirstLetter(currentCourse.term),
-					//currentCourse.year
-					console.log(Object.getOwnPropertyNames(currentCatalog.courses[courseKey]))
-					)
-				);
-		}*/
 
 		for (let courseKey in externalPlan.courses) {
 			//console.log(courseKey)
@@ -188,12 +260,12 @@ function externalPlanHandler() {
 		pageScheduleContainer.innerHTML = generateScheduleHTML(currentPlan);
 		pageScheduleHeader.innerHTML = generateScheduleHeader(currentPlan);
 		//document.getElementById("student").innerHTML = "<strong>Student: </strong>" + externalPlan.student;
-		//document.getElementById("catalog").innerHTML = "<strong>Catalog: </strong>" + currentCatalog.year;
-		//document.getElementById("major").innerHTML = "<strong>Major: </strong>" + externalPlan.major;
-		//document.getElementById("minor").innerHTML = "<strong>Minor: </strong>" + externalPlan.minor;
+		document.getElementById("catalog").innerHTML = "<strong>Catalog: </strong><var>" + externalPlan.currYear + "</var>";
+		document.getElementById("major").innerHTML = "<strong>Major: </strong><var>" + externalPlan.major + "</var>";
+		document.getElementById("minor").innerHTML = "<strong>Minor: </strong><var>" + externalPlan.minor + "</var>";
 
 		for (const property in (currentCatalog.courses)) {
-			$("tbody").append("<tr><td>"+property+"</td><td>"+currentCatalog.courses[property].name+"</td><td>"+currentCatalog.courses[property].credits+"</td></tr>")
+			$("tbody").append("<tr ondragstart='dragCourse(event)' draggable='true' id='" + property + "'><td>"+property+"</td><td>"+currentCatalog.courses[property].name+"</td><td>"+currentCatalog.courses[property].credits+"</td></tr>")
 		}
 		searchCourses();
 	}
@@ -212,76 +284,77 @@ function isCourseOnPlan(id) {
 }
 
 function loadRequirements() {
+	if (this.status == 200) {
+		//parser = new DOMParser();
+		//let requirements = parser.parseFromString(this,"text/xml");
+		//console.log("LoadRequirements:"+requirements);
 
-	//parser = new DOMParser();
-	//let requirements = parser.parseFromString(this,"text/xml");
-	//console.log("LoadRequirements:"+requirements);
+		let requirements = this.response.categories;
+		console.log(this.response);
 
-	let requirements = this.response.categories;
-	console.log(requirements);
+		let currentCourseName = "";
 
-	let currentCourseName = "";
-
-	// Load Core Classes
-	let coreHTML = "<p>";
-	//console.log(currentCatalog);
-	if (requirements.Core !== undefined) {
-		for(let course in requirements.Core.courses) {
-			if(isCourseOnPlan(requirements.Core.courses[course])) {
-				coreHTML += "<img src='./images/checkmark.png' width=10 height=10> ";
-			} else {
-				coreHTML += "<img src='./images/x-mark.png' width=10 height=10> ";
+		// Load Core Classes
+		let coreHTML = "<p>";
+		//console.log(currentCatalog);
+		if (requirements.Core !== undefined) {
+			for (let course in requirements.Core.courses) {
+				if (isCourseOnPlan(requirements.Core.courses[course])) {
+					coreHTML += "<img src='/images/checkmark.png' width=10 height=10> ";
+				} else {
+					coreHTML += "<img src='/images/x-mark.png' width=10 height=10> ";
+				}
+				currentCourseName = currentCatalog.courses[requirements.Core.courses[course]].name;
+				coreHTML += "<span ondragstart='dragCourse(event)' draggable='true' id='" + requirements.Core.courses[course] + "'>" + requirements.Core.courses[course] + " " + currentCourseName + "</span><br>";
 			}
-			currentCourseName = currentCatalog.courses[requirements.Core.courses[course]].name;
-			coreHTML += requirements.Core.courses[course] + " " + currentCourseName + "<br>";
 		}
-	}
-	$(".core").html(coreHTML + "</p>");
+		$(".core").html(coreHTML + "</p>");
 
-	// Load Track (Elective) Classes
-	let trackHTML = "<p>";
-	if (requirements.Electives !== undefined) {
-		for(let course in requirements.Electives.courses) {
-			if(isCourseOnPlan(requirements.Electives.courses[course])) {
-				trackHTML += "<img src='./images/checkmark.png' width=10 height=10> ";
-			} else {
-				trackHTML += "<img src='./images/x-mark.png' width=10 height=10> ";
+		// Load Track (Elective) Classes
+		let trackHTML = "<p>";
+		if (requirements.Electives !== undefined) {
+			for (let course in requirements.Electives.courses) {
+				if (isCourseOnPlan(requirements.Electives.courses[course])) {
+					trackHTML += "<img src='/images/checkmark.png' width=10 height=10> ";
+				} else {
+					trackHTML += "<img src='/images/x-mark.png' width=10 height=10> ";
+				}
+				currentCourseName = currentCatalog.courses[requirements.Electives.courses[course]].name;
+				trackHTML += "<span ondragstart='dragCourse(event)' draggable='true' id='" + requirements.Electives.courses[course] + "'>" + requirements.Electives.courses[course] + " " + currentCourseName + "</span><br>";
 			}
-			currentCourseName = currentCatalog.courses[requirements.Electives.courses[course]].name;
-			trackHTML += requirements.Electives.courses[course] + " " + currentCourseName + "<br>";
 		}
-	}
-	$(".track").html(trackHTML + "</p>");
+		$(".track").html(trackHTML + "</p>");
 
-	// Load Cognates
-	let cognatesHTML = "<p>";
-	if (requirements.Cognates !== undefined) {
-		for(let course in requirements.Cognates.courses) {
-			if(isCourseOnPlan(requirements.Cognates.courses[course])) {
-				cognatesHTML += "<img src='./images/checkmark.png' width=10 height=10> ";
-			} else {
-				cognatesHTML += "<img src='./images/x-mark.png' width=10 height=10> ";
+		// Load Cognates
+		let cognatesHTML = "<p>";
+		if (requirements.Cognates !== undefined) {
+			for (let course in requirements.Cognates.courses) {
+				if (isCourseOnPlan(requirements.Cognates.courses[course])) {
+					cognatesHTML += "<img src='/images/checkmark.png' width=10 height=10> ";
+				} else {
+					cognatesHTML += "<img src='/images/x-mark.png' width=10 height=10> ";
+				}
+				currentCourseName = currentCatalog.courses[requirements.Cognates.courses[course]].name;
+				cognatesHTML += "<span ondragstart='dragCourse(event)' draggable='true' id='" + requirements.Cognates.courses[course] + "'>" + requirements.Cognates.courses[course] + " " + currentCourseName + "</span><br>";
 			}
-			currentCourseName = currentCatalog.courses[requirements.Cognates.courses[course]].name;
-			cognatesHTML += requirements.Cognates.courses[course] + " " + currentCourseName + "<br>";
 		}
-	}
-	$(".cognates").html(cognatesHTML + "</p>");
+		$(".cognates").html(cognatesHTML + "</p>");
 
-	// Load Gen Eds
-	let genEdsHTML = "<p>";
-	if (requirements.GenEds !== undefined) {
-		for(let course in requirements.GenEds.courses) {
-			if(isCourseOnPlan(requirements.GenEds.courses[course])) {
-				genEdsHTML += "<img src='./images/checkmark.png' width=10 height=10> ";
-			} else {
-				genEdsHTML += "<img src='./images/x-mark.png' width=10 height=10> ";
+		// Load Gen Eds
+		let genEdsHTML = "<p>";
+		if (requirements.GenEds !== undefined) {
+			for (let course in requirements.GenEds.courses) {
+				if (isCourseOnPlan(requirements.GenEds.courses[course])) {
+					genEdsHTML += "<img src='/images/checkmark.png' width=10 height=10> ";
+				} else {
+					genEdsHTML += "<img src='/images/x-mark.png' width=10 height=10> ";
+				}
+				currentCourseName = currentCatalog.courses[requirements.GenEds.courses[course]].name;
+				genEdsHTML += "<span ondragstart='dragCourse(event)' draggable='true' id='" + requirements.GenEds.courses[course] + "'>" + requirements.GenEds.courses[course] + " " + currentCourseName + "</span><br>";
 			}
-			currentCourseName = currentCatalog.courses[requirements.GenEds.courses[course]].name;
-			genEdsHTML += requirements.GenEds.courses[course] + " " + currentCourseName + "<br>";
 		}
+		$(".geneds").html(genEdsHTML + "</p>");
 	}
-	$(".geneds").html(genEdsHTML + "</p>");
 }
 
 function searchCourses() {
@@ -339,13 +412,14 @@ function init() {
 
 	xhr.addEventListener("load", externalPlanHandler);
 	xhr.responseType = "json";
-	xhr.open("GET", "localhost:80/php/getCombined.php");
-	xhr.onreadystatechange = function() {
-		if(xhrReq == undefined) {
+	xhr.open("GET", "/plan/" + document.getElementById("planSelect").value);
+	//console.log("Sent request to route!" + " localhost:7019/plan/" + document.getElementById("planSelect").value);
+	xhr.onreadystatechange = function () {
+		if (xhrReq == undefined) {
 			xhrReq = new XMLHttpRequest();
 			xhrReq.addEventListener("load", loadRequirements);
 			xhrReq.responseType = "json";
-			xhrReq.open("GET", "localhost:80/php/getRequirements.php");
+			xhrReq.open("GET", "/plan/" + document.getElementById("planSelect").value + "/requirements");
 			xhrReq.send();
 		}
 	}
@@ -456,18 +530,19 @@ function changePlan(event) {
 
 	xhr.addEventListener("load", externalPlanHandler);
 	xhr.responseType = "json";
-	xhr.open("GET", "plan/" + document.getElementById("planSelect").value);
+	xhr.open("GET", "/plan/" + document.getElementById("planSelect").value);
 	console.log("Sent request to route!" + " localhost:7019/plan/" + document.getElementById("planSelect").value);
 	xhr.onreadystatechange = function () {
 		if (xhrReq == undefined) {
 			xhrReq = new XMLHttpRequest();
 			xhrReq.addEventListener("load", loadRequirements);
 			xhrReq.responseType = "json";
-			xhrReq.open("GET", "plan/" + document.getElementById("planSelect").value);
+			xhrReq.open("GET", "/plan/" + document.getElementById("planSelect").value + "/requirements");
 			xhrReq.send();
 		}
 	}
 	xhr.send();
+	currentHighestYear = new Date().getFullYear() - 1;
 	return;
 }
 

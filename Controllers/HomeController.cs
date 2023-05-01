@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Project_5.Areas.Identity.Data;
 using Project_5.Models;
 using System.Diagnostics;
 
@@ -17,8 +19,14 @@ namespace Project_5.Controllers
         [Authorize]
         public IActionResult Index()
         {
+            // Handle redirects to proper pages
+            if (!User.IsInRole("Student"))
+            {
+				if (User.IsInRole("Administrator")) return RedirectToAction("Index", "UserManagement");
+				else if (User.IsInRole("Faculty")) return RedirectToAction("Index", "Faculty");
+			}
             return View();
-        }
+		}
 
         [Authorize]
         public IActionResult Privacy()

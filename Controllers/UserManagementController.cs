@@ -9,7 +9,7 @@ using Project_5.Helpers;
 
 namespace Project_5.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Administrator")]
     public class UserManagementController : Controller
     {
         //private readonly UserManager<Project_5User> userManager;

@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Project_5.Data;
 using Microsoft.AspNetCore.Identity;
 
 namespace Project_5.Controllers
 {
-    public class RoleController : Controller
+	//[Authorize(Roles = "Administrator")]
+	public class RoleController : Controller
     {
         private Project_5Context context;
 

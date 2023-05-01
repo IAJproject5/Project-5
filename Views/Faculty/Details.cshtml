@@ -1,10 +1,13 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using Project_5.Areas.Identity.Data
-@inject UserManager<Project_5User> UserManager;
-@inject SignInManager<Project_5User> SignInManager;
 
+@inject SignInManager<Project_5User> SignInManager
+@inject UserManager<Project_5User> UserManager
+
+@model Project_5User
+@using static Microsoft.AspNetCore.Identity.IdentityRole
 @{
-    ViewData["Title"] = "Home Page";
+	ViewData["Title"] = "View Student Plan";
 }
 
 <head>
@@ -55,24 +58,18 @@
 					No schedule loaded.
 				</div>
 				<div class="schedule-ui">
-					<button onclick="addYear(event)">Add Year</button>
 					<button onclick="changePlan(event)">Refresh</button>
-					<button onclick="savePlan(event)">Save</button>
-					<button onclick="createPlan(event)">New</button>
 					<FORM onSubmit='JavaScript:changePlan()'>
 						<label for='planSelect'>Plan</label>
 						<select name='planSelect' id='planSelect' class='planSelect' onchange='changePlan(event)'>
 							@{
-								if (SignInManager.IsSignedIn(User)/* && Project_5.Helpers.PlanHelper.getUserPlans("afe2f275-43ed-40a1-b2ee-322b7ea34c9b") != null*/)
+								foreach (IajPlan plan in Project_5.Helpers.PlanHelper.getUserPlans(Model.Id))
 								{
-									foreach (IajPlan plan in Project_5.Helpers.PlanHelper.getUserPlans(UserManager.GetUserId(User)))
-									{
-										WriteLiteral("<option value='");
-										WriteLiteral(plan.PlanId);
-										WriteLiteral("'>");
-										WriteLiteral(plan.PlanName);
-										WriteLiteral("</option>");
-									}
+									WriteLiteral("<option value='");
+									WriteLiteral(plan.PlanId);
+									WriteLiteral("'>");
+									WriteLiteral(plan.PlanName);
+									WriteLiteral("</option>");
 								}
 							}
 						</select>
@@ -87,7 +84,7 @@
 						</h2>
 					</div>
 					<div style="text-align:left" class="validation-courses">
-						<div id='student'><strong>User: </strong><var>@UserManager.GetUserName(User)</var></div>
+						<div id='student'><strong>User: </strong><var>@Model.UserName</var></div>
 						<div id='major'><strong>Major: </strong><var></var></div>
 						<div id='minor'><strong>Minor: </strong><var></var></div>
 						<div id='catalog'><strong>Catalog: </strong><var></var></div>
