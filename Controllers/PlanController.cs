@@ -143,7 +143,7 @@ namespace Project_5.Controllers
                     {
                         if (firstMinor)
                         {
-                            first = false;
+							firstMinor = false;
                             minor += subject.Subject;
                         }
                         else
