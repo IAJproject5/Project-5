@@ -37,15 +37,56 @@ namespace Project_5.Helpers
 			}*/
 			return planCourses;
 		}
-		public static List<IajSubject> getPlanSubjects(int planId)
+        public static void setPlanCourses(int planId, List<IajPlanCourse> planCourses)
+        {
+            var deletePlanCourses = context.IajPlanCourses.Where(b => b.PlanId.Equals(planId)).ToList();
+			foreach (IajPlanCourse planCoursePair in deletePlanCourses)
+			{
+				context.IajPlanCourses.Remove(planCoursePair);
+			}
+			try
+			{
+				context.SaveChanges();
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e);
+			}
+			context.IajPlanCourses.AddRange(planCourses);
+            try
+            {
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+        public static void deletePlanCourses(int planId)
+        {
+            var deletePlanCourses = context.IajPlanCourses.Where(b => b.PlanId.Equals(planId)).ToList();
+            foreach (IajPlanCourse planCoursePair in deletePlanCourses)
+            {
+                context.IajPlanCourses.Remove(planCoursePair);
+            }
+            try
+            {
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+        public static List<IajPlanSubject> getPlanSubjects(int planId)
 		{
-			var planSubjects = context.IajPlanSubjects.Where(b => b.PlanId.Equals(planId.ToString())).ToList();
-			List<IajSubject> subjects = new List<IajSubject>();
+			var planSubjects = context.IajPlanSubjects.Where(b => b.PlanId.Equals(planId)).ToList();
+			/*List<IajSubject> subjects = new List<IajSubject>();
 			foreach (IajPlanSubject planSubjectPair in planSubjects)
 			{
 				subjects.Add(context.IajSubjects.Where(b => b.Subject.Equals(planSubjectPair.Subject)).FirstOrDefault());
-			}
-			return subjects;
+			}*/
+			return planSubjects;
 		}
 		public static string? getPlanUserId(int planId)
 		{

@@ -10,4 +10,3 @@ namespace Project_5.Areas.Identity.Data;
 public class Project_5User : IdentityUser
 {
 }
-

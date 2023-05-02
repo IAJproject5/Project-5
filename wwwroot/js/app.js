@@ -148,13 +148,21 @@ function generateScheduleHTML(plan) {
 }
 
 function savePlan(event) {
-	console.log(JSON.stringify(currentPlan));
-	return;
 	xhrReq = new XMLHttpRequest();
 	xhrReq.addEventListener("load", planSaveHandler);
-	xhrReq.responseType = "";
-	xhrReq.open("PUT", "/plan/" + document.getElementById("planSelect").value);
+	xhrReq.responseType = "application/json";
+	xhrReq.open("POST", "/plan/" + document.getElementById("planSelect").value);
+	xhrReq.setRequestHeader('Content-Type', 'application/json');
 	xhrReq.send(JSON.stringify(currentPlan));
+}
+
+function planSaveHandler() {
+	if (this.status == 200) {
+		//console.log(this.response);
+	}
+	else {
+		//console.log("FAIL.");
+	}
 }
 
 function addYear(event) {
@@ -167,11 +175,9 @@ function addYear(event) {
 function removeCourse(event) {
 	var target = event;
 	var parent = target.parentElement;
-	console.log(target.innerHTML);
 	if (target.innerHTML != "X") {
 		return;
 	}
-	console.log(parent.id);
 	for (let i = 0; i < currentPlan.courses.length; i++) {
 		if (currentPlan.courses[i].id == parent.id/*ID of course with X pressed*/) {
 			currentPlan.courses.splice(i, 1);
@@ -193,9 +199,7 @@ function onYearDragOver(event) {
 
 function onCourseDrop(event, caller) {
 	if (event.currentTarget.classList.contains("schedule-year-block")) {
-		console.log(event.currentTarget.id);
 		event.preventDefault();
-		console.log("Dropped " + event.dataTransfer.getData("courseInfo"));
 		let dropCourseID = event.dataTransfer.getData("courseInfo").split(",")[0];
 		for (let i = 0; i < currentPlan.courses.length; i++) {
 			if (currentPlan.courses[i].id == dropCourseID) {
@@ -232,7 +236,6 @@ function externalPlanHandler() {
 	if (this.status === 200) {
 		let returnPlan = new Plan("John Smith's Plan", 0, "", "John Smith", "", []);
 		let externalPlan = this.response.plan;
-		console.log(this.status);
 		currentCatalog = this.response.catalog;
 		let currentYear;
 		returnPlan.name = externalPlan.name;
@@ -243,7 +246,6 @@ function externalPlanHandler() {
 		let currentCourse;
 
 		for (let courseKey in externalPlan.courses) {
-			//console.log(courseKey)
 			currentCourse = externalPlan.courses[courseKey];
 			if (courseKey != "") {
 				returnPlan.courses.push(new Course(
@@ -263,7 +265,7 @@ function externalPlanHandler() {
 		document.getElementById("catalog").innerHTML = "<strong>Catalog: </strong><var>" + externalPlan.currYear + "</var>";
 		document.getElementById("major").innerHTML = "<strong>Major: </strong><var>" + externalPlan.major + "</var>";
 		document.getElementById("minor").innerHTML = "<strong>Minor: </strong><var>" + externalPlan.minor + "</var>";
-
+		$("tbody").html("");
 		for (const property in (currentCatalog.courses)) {
 			$("tbody").append("<tr ondragstart='dragCourse(event)' draggable='true' id='" + property + "'><td>"+property+"</td><td>"+currentCatalog.courses[property].name+"</td><td>"+currentCatalog.courses[property].credits+"</td></tr>")
 		}
@@ -290,7 +292,6 @@ function loadRequirements() {
 		//console.log("LoadRequirements:"+requirements);
 
 		let requirements = this.response.categories;
-		console.log(this.response);
 
 		let currentCourseName = "";
 
@@ -413,7 +414,6 @@ function init() {
 	xhr.addEventListener("load", externalPlanHandler);
 	xhr.responseType = "json";
 	xhr.open("GET", "/plan/" + document.getElementById("planSelect").value);
-	//console.log("Sent request to route!" + " localhost:7019/plan/" + document.getElementById("planSelect").value);
 	xhr.onreadystatechange = function () {
 		if (xhrReq == undefined) {
 			xhrReq = new XMLHttpRequest();
@@ -428,7 +428,7 @@ function init() {
 	styleLateInit();
 }
 
-function klisten0(doc, addr) {
+/*function klisten0(doc, addr) {
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
 	  if (this.readyState == 4 && this.status == 200) {
@@ -522,7 +522,7 @@ function clearCars(doc) {
 	while (doc.hasChildNodes()){
 		doc.removeChild(doc.firstChild);
 	}
-}
+}*/
 
 function changePlan(event) {
 	let xhr = new XMLHttpRequest();
@@ -531,7 +531,6 @@ function changePlan(event) {
 	xhr.addEventListener("load", externalPlanHandler);
 	xhr.responseType = "json";
 	xhr.open("GET", "/plan/" + document.getElementById("planSelect").value);
-	console.log("Sent request to route!" + " localhost:7019/plan/" + document.getElementById("planSelect").value);
 	xhr.onreadystatechange = function () {
 		if (xhrReq == undefined) {
 			xhrReq = new XMLHttpRequest();

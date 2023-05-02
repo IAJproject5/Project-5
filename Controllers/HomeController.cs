@@ -19,7 +19,7 @@ namespace Project_5.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            // Handle redirects to proper pages
+            // Handle redirects to proper pages for Administrators and Faculty who are not also students.
             if (!User.IsInRole("Student"))
             {
 				if (User.IsInRole("Administrator")) return RedirectToAction("Index", "UserManagement");

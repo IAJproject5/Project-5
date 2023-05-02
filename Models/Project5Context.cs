@@ -29,6 +29,8 @@ public partial class Project5Context : DbContext
 
     public virtual DbSet<Efmigrationshistory> Efmigrationshistories { get; set; }
 
+	public virtual DbSet<IajAdvisorAdvisee> IajAdvisorAdvisees { get; set; }
+	
     public virtual DbSet<IajCatalog> IajCatalogs { get; set; }
 
     public virtual DbSet<IajCourse> IajCourses { get; set; }
@@ -175,7 +177,21 @@ public partial class Project5Context : DbContext
             entity.Property(e => e.ProductVersion).HasMaxLength(32);
         });
 
-        modelBuilder.Entity<IajCatalog>(entity =>
+		modelBuilder.Entity<IajAdvisorAdvisee>(entity =>
+		{
+			entity
+				.HasNoKey()
+				.ToTable("iaj_advisor_advisee");
+
+			entity.Property(e => e.AdvisorId)
+				.HasMaxLength(255)
+				.HasColumnName("advisor_id");
+			entity.Property(e => e.AdviseeId)
+				.HasMaxLength(255)
+				.HasColumnName("advisee_id");
+		});
+
+		modelBuilder.Entity<IajCatalog>(entity =>
         {
             entity.HasKey(e => e.Year).HasName("PRIMARY");
 
@@ -236,9 +252,10 @@ public partial class Project5Context : DbContext
         modelBuilder.Entity<IajPlanCourse>(entity =>
         {
             entity
-                .HasNoKey()
+                //.HasNoKey()
                 .ToTable("iaj_plan_courses");
 
+            entity.HasKey(u => new { u.CourseId, u.PlanId, u.Term, u.Year });
             entity.Property(e => e.CourseId)
                 .HasMaxLength(20)
                 .HasColumnName("course_id");

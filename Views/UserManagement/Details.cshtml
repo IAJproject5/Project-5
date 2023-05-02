@@ -21,17 +21,54 @@
         <form asp-action="Update">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
+                <label asp-for="Id" class="control-label"></label>
+                <input readonly asp-for="Id" class="form-control" />
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="UserName" class="control-label"></label>
-                <input asp-for="UserName" class="form-control" />
+                <input readonly asp-for="UserName" class="form-control" />
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
+                <input readonly asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
+        </form>
+        <form action="/UserManagement/@(Model.Id)/UpdateRoles" method="post">
             <div class="form-group">
-                <input type="submit" value="Update" class="btn btn-primary" />
+                <label for='roleSelect'>Role (Use Ctrl to select multiple)</label>
+                <select multiple name='roleSelect' id='roleSelect' class='roleSelect'>
+                    @{
+                        foreach (IdentityRole role in Project_5.Helpers.UserManagementHelper.getRoles())
+                        {
+                            var hasRole = false;
+                            foreach (IdentityRole userRole in Project_5.Helpers.UserManagementHelper.getUserRoleList(Model.Id))
+                            {
+                                if (role.Id == userRole.Id)
+                                {
+                                    hasRole = true;
+                                }
+                            }
+                            if (hasRole)
+                            {
+                                WriteLiteral("<option selected value='");
+                            }
+                            else
+                            {
+                                WriteLiteral("<option value='");
+                            }
+                            WriteLiteral(role.Id);
+                            WriteLiteral("'>");
+                            WriteLiteral(role.Name);
+                            WriteLiteral("</option>");
+                        }
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Update Roles" class="btn btn-primary" />
             </div>
         </form>
     </div>

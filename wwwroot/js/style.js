@@ -346,9 +346,9 @@ function styleInit() {
 }
 
 function styleLateInit() {
-	document.getElementById("colors").addEventListener("input", changeColor);
-	document.getElementById("colorCheck").addEventListener("change", changeColor);
-	klisten0(document.getElementById("year"), "http://judah.cedarville.edu/~gallaghd/ymm/ymmdb.php?fmt=xml");
-	document.getElementById("year").addEventListener("change", klisten1);
-	document.getElementById("make").addEventListener("change", klisten2);
+	//document.getElementById("colors").addEventListener("input", changeColor);
+	//document.getElementById("colorCheck").addEventListener("change", changeColor);
+	//klisten0(document.getElementById("year"), "http://judah.cedarville.edu/~gallaghd/ymm/ymmdb.php?fmt=xml");
+	//document.getElementById("year").addEventListener("change", klisten1);
+	//document.getElementById("make").addEventListener("change", klisten2);
 }

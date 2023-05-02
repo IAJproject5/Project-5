@@ -22,6 +22,7 @@ builder.Services.AddDefaultIdentity<Project_5User>(options => options.SignIn.Req
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<UserManagementHelper>();
 builder.Services.AddScoped<PlanHelper>();
+builder.Services.AddScoped<FacultyHelper>();
 
 var app = builder.Build();
 

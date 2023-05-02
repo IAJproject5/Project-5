@@ -35,9 +35,42 @@ namespace Project_5.Helpers
             }
             return roleNames;
         }
-        public static void createNewUser()
+        public static List<IdentityRole> getRoles()
         {
-
+            List<IdentityRole> roleNames = context.Roles.ToList<IdentityRole>();
+            return roleNames;
+        }
+        public static void updateUser(Project_5User user)
+        {
+            var currentUser = context.Users.Where(u => u.Id.Equals(user.Id)).FirstOrDefault();
+            if (currentUser == null) return;
+            currentUser.UserName = user.UserName;
+            currentUser.NormalizedUserName = user.UserName.ToUpper();
+            currentUser.Email = user.Email;
+            currentUser.NormalizedEmail = user.Email.ToUpper();
+            context.Users.Update(currentUser);
+            context.SaveChanges();
+            return;
+        }
+        public static void deleteUser(string userId)
+        {
+            var currentUser = context.Users.Where(u => u.Id.Equals(userId)).FirstOrDefault();
+            //if (currentUser == null) return;
+            context.Users.Remove(currentUser);
+            context.SaveChanges();
+        }
+        public static void setUserRoles(string userId, List<string> roleIds)
+        {
+            var currentUserRoles = context.UserRoles.Where(u => u.UserId.Equals(userId)).ToList();
+            context.UserRoles.RemoveRange(currentUserRoles);
+            context.SaveChanges();
+            var newRoles = context.Roles.Where(u => roleIds.Contains(u.Id)).ToList();
+            foreach (var role in newRoles)
+            {
+                var newUserRole = new IdentityUserRole<string> { RoleId = role.Id, UserId = userId };
+                context.UserRoles.Add(newUserRole);
+            }
+            context.SaveChanges();
         }
     }
 }

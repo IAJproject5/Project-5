@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Project_5.Controllers
 {
-	//[Authorize(Roles = "Administrator")]
+	[Authorize(Roles = "Administrator")]
 	public class RoleController : Controller
     {
         private Project_5Context context;

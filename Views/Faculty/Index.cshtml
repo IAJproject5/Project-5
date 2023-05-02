@@ -1,10 +1,11 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using Project_5.Areas.Identity.Data
+@using Project_5.Helpers
 
 @inject SignInManager<Project_5User> SignInManager
 @inject UserManager<Project_5User> UserManager
 
-@model IEnumerable<Project_5User>
+@model IEnumerable<Aspnetuser>
 @using static Microsoft.AspNetCore.Identity.IdentityRole
 @{
     ViewData["Title"] = "Student Management";
@@ -14,9 +15,8 @@
 
 <table class="table table-sm table-bordered">
     <tr><th>Name</th><th>Email</th><th></th></tr>
-    @foreach (Project_5User user in Model)
+    @foreach (Aspnetuser user in Model)
     {
-        if (user.Id != UserManager.GetUserId(User))
         {
             <tr>
                 <td>@user.UserName</td>

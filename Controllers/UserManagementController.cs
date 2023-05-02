@@ -12,14 +12,7 @@ namespace Project_5.Controllers
     [Authorize(Roles = "Administrator")]
     public class UserManagementController : Controller
     {
-        //private readonly UserManager<Project_5User> userManager;
-
         private UserManagementHelper helper;
-
-        /*public UserManagementController(UserManager<Project_5User> usrMgr)
-        {
-            userManager = usrMgr;
-        }*/
 
         public UserManagementController(UserManagementHelper userManagementHelper)
         {
@@ -27,12 +20,17 @@ namespace Project_5.Controllers
         }
 
         // GET: Users
-        [HttpGet]
+        [HttpGet("UserManagement")]
         public IActionResult Index()
         {
             return View("Views/UserManagement/Index.cshtml", UserManagementHelper.getUserList());
         }
-
+        [HttpGet("UserManagement/{userId}/Delete")]
+        public IActionResult Delete(string userId)
+        {
+            UserManagementHelper.deleteUser(userId);
+            return RedirectToAction("Index");
+        }
         [HttpGet("UserManagement/{userId}")]
         public IActionResult Index(string userId)
         {
@@ -40,37 +38,16 @@ namespace Project_5.Controllers
         }
 
         [HttpPost("UserManagement/Update")]
-        public IActionResult Update(string userId)
+        public IActionResult Update(Project_5User user)
         {
-            return View("Views/UserManagement/Update.cshtml");
+            UserManagementHelper.updateUser(user);
+            return RedirectToAction("Index");
         }
-        [HttpPost]
-        public IActionResult Create(Project_5User user)
+        [HttpPost("UserManagement/{userId}/UpdateRoles")]
+        public IActionResult UpdateRoles(string userId, [FromForm] List<string> roleSelect)
         {
-            return View(user);
+            UserManagementHelper.setUserRoles(userId, roleSelect);
+            return RedirectToAction("Index");
         }
-        [HttpGet("UserManagement/Create")]
-        public IActionResult Create()
-        {
-            return View("Views/UserManagement/Create.cshtml");
-        }
-
-        /*[HttpGet("id")]
-        public async Task<IActionResult> Index(int id)
-        {
-            var user = await context.Users.FindAsync(id);
-            var roles = context.UserRoles.Where(b => b.UserId.Equals(user.Id)).ToList();
-            return Json(roles);
-        }
-        public static List<IdentityRole> ListRoles(string userId)
-        {
-            var roles = context.UserRoles.Where(b => b.UserId.Equals(userId)).ToList();
-            List<IdentityRole> roleNames = new List<IdentityRole>();
-            foreach (IdentityUserRole<string> roleToUser in roles)
-            {
-                roleNames.Add(context.Roles.Where(b => b.Id.Equals(roleToUser.RoleId)).FirstOrDefault());
-            }
-            return roleNames;
-        }*/
     }
 }

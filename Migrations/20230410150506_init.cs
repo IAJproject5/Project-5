@@ -196,6 +196,33 @@ namespace Project_5.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+			migrationBuilder.CreateTable(
+				name: "AdvisorAdvisee",
+				columns: table => new
+				{
+					AdvisorId = table.Column<string>(type: "varchar(255)", nullable: false)
+						.Annotation("MySql:CharSet", "utf8mb4"),
+					AdviseeId = table.Column<string>(type: "varchar(255)", nullable: false)
+						.Annotation("MySql:CharSet", "utf8mb4")
+				},
+				constraints: table =>
+				{
+					table.PrimaryKey("PK_AspNetUserRoles", x => new { x.AdvisorId, x.AdviseeId });
+					table.ForeignKey(
+						name: "FK_AspNetUserRoles_AspNetUsers_UserId",
+						column: x => x.AdvisorId,
+						principalTable: "AspNetUsers",
+						principalColumn: "Id",
+						onDelete: ReferentialAction.Cascade);
+					table.ForeignKey(
+						name: "FK_AspNetUserRoles_AspNetUsers_UserId",
+						column: x => x.AdviseeId,
+						principalTable: "AspNetUsers",
+						principalColumn: "Id",
+						onDelete: ReferentialAction.Cascade);
+				})
+				.Annotation("MySql:CharSet", "utf8mb4");
+
 
 			migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -233,7 +260,7 @@ namespace Project_5.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
-        }
+		}
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
